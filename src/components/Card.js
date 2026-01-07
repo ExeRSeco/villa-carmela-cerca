@@ -1,0 +1,118 @@
+import { escapeHTML } from '../utils.js';
+
+export function LinkIcon() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+</svg>`
+}
+
+export function PhoneIcon() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+</svg>`
+}
+
+export function LocationIcon() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+</svg>`
+}
+
+export function StarIcon() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+</svg>`
+}
+
+export const Card = (data) => {
+    const isFeatured = data.isFeatured;
+    const safeName = escapeHTML(data.name);
+    const safeCategory = escapeHTML(data.category);
+    const safeAddress = escapeHTML(data.address);
+    const safePhone = escapeHTML(data.phone);
+    const safeWhatsapp = escapeHTML(data.whatsapp);
+    const safeTags = data.tags.map(escapeHTML).join(' • ');
+
+    return `
+    <article class="bg-white rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer h-full flex flex-col group relative ${isFeatured ? 'border-2 border-yellow-400 shadow-xl scale-[1.02]' : 'border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-1'}" data-business-id="${data.id}">
+        ${isFeatured ? `
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 z-20 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-4 py-1 rounded-b-lg shadow-sm tracking-widest uppercase">
+            Destacado
+        </div>
+        ` : ''}
+    
+        <div class="relative h-48 overflow-hidden shrink-0">
+            <img src="${data.image}" alt="${safeName}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${data.isOpen ? 'text-green-600' : 'text-stone-500'} shadow-sm">
+                ${data.isOpen ? 'Abierto' : 'Cerrado'}
+            </div>
+            ${data.promotions ? `
+            <div class="absolute top-4 left-4 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1 z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                Promo
+            </div>
+            ` : ''}
+            ${data.delivery ? `
+            <div class="absolute bottom-4 left-4 bg-spa-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-sm flex items-center gap-1">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                    <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0014 7z" />
+                 </svg>
+                 Delivery
+            </div>
+            ` : ''}
+        </div>
+        
+        <div class="p-5 flex flex-col flex-grow">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                     <span class="text-xs font-bold text-spa-600 uppercase tracking-wider">${safeCategory}</span>
+                     <h3 class="text-xl font-bold text-stone-800 font-headings mt-1 group-hover:text-spa-600 transition-colors">${safeName}</h3>
+                </div>
+            </div>
+
+            <p class="text-xs text-stone-400 mb-4 line-clamp-1">${safeTags}</p>
+
+            <div class="space-y-3 mb-6 flex-grow">
+                <div class="flex items-start text-sm text-stone-600 group/link hover:text-spa-600 transition-colors z-10 relative w-fit" data-action="map" data-address="${safeAddress}">
+                    <span class="mr-2 text-spa-400 mt-0.5 group-hover/link:scale-110 transition-transform">${LocationIcon()}</span>
+                    <span class="group-hover/link:underline decoration-spa-300 underline-offset-2">${safeAddress}</span>
+                </div>
+                 <div class="flex items-center text-sm text-stone-600 group/link hover:text-green-600 transition-colors z-10 relative w-fit" data-action="whatsapp" data-phone="${safeWhatsapp || safePhone}">
+                    <span class="mr-2 text-spa-400 group-hover/link:text-green-500 group-hover/link:scale-110 transition-transform">${PhoneIcon()}</span>
+                    <span class="group-hover/link:underline decoration-green-300 underline-offset-2">${safePhone}</span>
+                </div>
+            </div>
+
+             <div class="pt-4 border-t border-stone-100 mt-auto">
+                 ${data.paymentMethods ? `
+                 <div class="flex items-center gap-2 mb-3 overflow-x-auto no-scrollbar">
+                    ${data.paymentMethods.slice(0, 3).map(pm => `
+                        <span class="text-[10px] uppercase font-bold text-stone-500 bg-stone-100 px-2 py-1 rounded border border-stone-200 whitespace-nowrap">
+                            ${escapeHTML(pm)}
+                        </span>
+                    `).join('')}
+                    ${data.paymentMethods.length > 3 ? `<span class="text-[10px] text-stone-400">+${data.paymentMethods.length - 3} more</span>` : ''}
+                 </div>
+                 ` : ''}
+                 
+                 <div class="flex flex-row flex-wrap gap-2">
+                     ${Array.isArray(data.hours) ? `
+                        <span class="text-xs text-stone-500 font-medium bg-stone-50 px-3 py-1 rounded-full w-fit border border-stone-100 line-clamp-1">
+                            ${escapeHTML(data.hours[0])}
+                            ${data.hours.length > 1 ? '<span class="text-stone-400 ml-1 font-normal text-[10px]">(+Info)</span>' : ''}
+                        </span>
+                     ` : `
+                        <span class="text-xs text-stone-500 font-medium bg-stone-50 px-3 py-1 rounded-full w-fit border border-stone-100">
+                            ${escapeHTML(data.hours)}
+                        </span>
+                     `}
+                </div>
+            </div>
+        </div>
+    </article>
+    `
+}
