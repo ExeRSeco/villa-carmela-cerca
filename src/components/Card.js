@@ -26,7 +26,18 @@ export function StarIcon() {
 }
 
 function getSmartStatus(hoursData, isOpenOverride) {
-    if (!hoursData || !hoursData.shifts) {
+    if (!hoursData) {
+        // Fallback or Legacy
+        return isOpenOverride
+            ? { text: 'Abierto', class: 'text-green-600', isOpen: true }
+            : { text: 'Cerrado', class: 'text-stone-500', isOpen: false };
+    }
+
+    if (hoursData.is24Hours) {
+        return { text: 'Abierto 24hs', class: 'text-green-600', isOpen: true };
+    }
+
+    if (!hoursData.shifts) {
         // Fallback or Legacy
         return isOpenOverride
             ? { text: 'Abierto', class: 'text-green-600', isOpen: true }
