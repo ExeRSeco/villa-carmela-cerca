@@ -52,8 +52,8 @@ export async function renderHome(container) {
         </div>
 
         <div id="hero-section" class="mb-12 text-center">
-            <h2 class="text-3xl md:text-5xl font-headings font-bold text-stone-900 mb-4 tracking-tight">Descubre el Bienestar Local</h2>
-            <p class="text-lg text-stone-500 max-w-2xl mx-auto font-light leading-relaxed">Explora los mejores negocios y servicios de tu ciudad.</p>
+            <h2 class="text-3xl md:text-5xl font-headings font-bold text-stone-900 mb-4 tracking-tight">Descubre Villa Carmela Cerca</h2>
+            <p class="text-lg text-stone-500 max-w-2xl mx-auto font-light leading-relaxed">La mejor guía de negocios y servicios de tu comunida, en Tucumán.</p>
         </div>
 
         <!-- Featured Section -->
@@ -82,7 +82,7 @@ export async function renderHome(container) {
         </div>
 
         <footer class="mt-20 border-t border-stone-100 py-10 text-center">
-            <p class="text-stone-400 text-sm mb-4">© 2024 Guía Amarilla. Todos los derechos reservados.</p>
+            <p class="text-stone-400 text-sm mb-4">© 2024 Villa Carmela Cerca. Todos los derechos reservados.</p>
             <a href="#admin" class="text-stone-300 hover:text-stone-500 text-xs transition-colors font-medium">Soy Dueño</a>
         </footer>
         `;

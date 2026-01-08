@@ -2,7 +2,7 @@ export const About = () => {
     return `
     <div class="max-w-4xl mx-auto animate-fade-in-up">
         <div class="text-center mb-16">
-            <h2 class="text-4xl font-headings font-bold text-stone-900 mb-6 tracking-tight">Sobre Guía Amarilla</h2>
+            <h2 class="text-4xl font-headings font-bold text-stone-900 mb-6 tracking-tight">Sobre Villa Carmela Cerca</h2>
             <div class="w-24 h-1 bg-spa-500 mx-auto rounded-full"></div>
         </div>
 

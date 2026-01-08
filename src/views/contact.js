@@ -36,7 +36,7 @@ export const Contact = () => {
                     </ul>
                 </div>
                 <div class="p-8 pt-0 mt-auto">
-                    <a href="https://wa.me/5493815055831?text=Hola,%20me%20interesa%20contratar%20el%20Plan%20Básico%20de%20la%20Guía%20Amarilla" target="_blank" class="block w-full text-center bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold py-4 rounded-xl transition-colors">
+                    <a href="https://wa.me/5493815055831?text=Hola,%20me%20interesa%20contratar%20el%20Plan%20Básico%20de%20Villa%20Carmela%20Cerca" target="_blank" class="block w-full text-center bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold py-4 rounded-xl transition-colors">
                         Contratar Plan Básico
                     </a>
                 </div>
@@ -78,7 +78,7 @@ export const Contact = () => {
                     </ul>
                 </div>
                 <div class="p-8 pt-0 mt-auto">
-                    <a href="https://wa.me/5493815055831?text=Hola,%20me%20interesa%20contratar%20el%20Plan%20Destacado%20de%20la%20Guía%20Amarilla" target="_blank" class="block w-full text-center bg-gradient-to-r from-spa-600 to-spa-500 hover:from-spa-500 hover:to-spa-400 text-white font-bold py-4 rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                    <a href="https://wa.me/5493815055831?text=Hola,%20me%20interesa%20contratar%20el%20Plan%20Destacado%20de%20Villa%20Carmela%20Cerca" target="_blank" class="block w-full text-center bg-gradient-to-r from-spa-600 to-spa-500 hover:from-spa-500 hover:to-spa-400 text-white font-bold py-4 rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
                         Contratar Plan Destacado
                     </a>
                 </div>

@@ -54,8 +54,9 @@ document.querySelector('#app').innerHTML = `
                 </ul>
             </div>
         </div>
+        </div>
         <div class="border-t border-stone-800 pt-8 text-center text-xs text-stone-500">
-            <p>&copy; 2024 Guía Amarilla. Todos los derechos reservados.</p>
+            <p>&copy; 2024 Villa Carmela Cerca. Todos los derechos reservados.</p>
         </div>
     </div>
 </footer>
@@ -120,14 +121,17 @@ async function router() {
     if (hash === '#about') {
         mainContent.innerHTML = About()
         navAbout.classList.add('text-spa-600', 'font-bold')
+        document.title = 'Nosotros - Villa Carmela Cerca'
     } else if (hash === '#contact') {
         const contactHTML = Contact()
         mainContent.innerHTML = contactHTML
         navContact.classList.add('text-spa-600', 'font-bold')
+        document.title = 'Publicita - Villa Carmela Cerca'
     } else {
         // Default Home
         renderHome(mainContent)
         navHome.classList.add('text-spa-600', 'font-bold')
+        document.title = 'Villa Carmela Cerca - Guía de Comercios y Servicios'
     }
 }
 
