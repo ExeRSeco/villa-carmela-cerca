@@ -7,6 +7,9 @@ import { Dashboard } from './views/admin/Dashboard.js'
 import { BusinessForm } from './views/admin/BusinessForm.js'
 import { CategoryManager } from './views/admin/CategoryManager.js'
 import { authService } from './services/authService.js'
+import { injectSpeedInsights } from '@vercel/speed-insights';
+
+injectSpeedInsights();
 
 document.querySelector('#app').innerHTML = `
 <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-100 shadow-sm transition-all duration-300" id="main-header">
