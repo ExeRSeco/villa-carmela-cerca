@@ -22,7 +22,7 @@ export async function renderHome(container) {
         <div class="bg-gradient-to-r from-spa-600 to-spa-500 rounded-2xl p-6 md:p-8 mb-10 text-white shadow-lg relative overflow-hidden animate-fade-in-up">
             <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="text-center md:text-left">
-                    <h3 class="text-2xl font-headings font-bold mb-2">¿Tienes un negocio en Villa Carmela?</h3>
+                    <h3 class="text-2xl font-headings font-bold mb-2">¿Tenés un comercio o brindás servicios?</h3>
                     <p class="text-spa-100 font-light">Publicita con nosotros desde <span class="font-bold text-white">$5.000/mes</span></p>
                 </div>
                 <button id="banner-contact-btn" class="bg-white text-spa-900 px-6 py-3 rounded-full font-bold shadow-md hover:bg-stone-50 hover:scale-105 transition-all duration-300">
@@ -43,20 +43,20 @@ export async function renderHome(container) {
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <input type="text" id="category-search" placeholder="Busca comercios por rubro en Villa Carmela" class="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 bg-stone-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-spa-200 focus:border-spa-400 transition-all shadow-sm text-stone-700 placeholder-stone-400">
+                    <input type="text" id="category-search" placeholder="Busca comercios y servicios en Villa Carmela por categoría..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 bg-stone-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-spa-200 focus:border-spa-400 transition-all shadow-sm text-stone-700 placeholder-stone-400">
                 </div>
             </div>
         </div>
 
         <div id="hero-section" class="mb-12 text-center">
-            <h2 class="text-3xl md:text-5xl font-headings font-bold text-stone-900 mb-4 tracking-tight">Guía de comercios en Villa Carmela – Horarios, WhatsApp y Delivery</h2>
-            <p class="text-lg text-stone-500 max-w-2xl mx-auto font-light leading-relaxed">Encuentra comercios y servicios en Villa Carmela, con horarios, ubicación, WhatsApp y delivery.</p>
+            <h2 class="text-3xl md:text-5xl font-headings font-bold text-stone-900 mb-4 tracking-tight">Guía de comercios y servicios en Villa Carmela</h2>
+            <p class="text-lg text-stone-500 max-w-2xl mx-auto font-light leading-relaxed">Encuentra comercios y servicios en Villa Carmela con horarios, ubicación, WhatsApp y atención a domicilio.</p>
         </div>
 
         <!-- Featured Section -->
         <div class="mb-16">
             <div class="flex items-center gap-4 mb-8">
-                <h2 class="text-2xl font-headings font-bold text-stone-800">Comercios destacados en Villa Carmela</h2>
+                <h2 class="text-2xl font-headings font-bold text-stone-800">Comercios y servicios destacados en Villa Carmela</h2>
                 <div class="h-px flex-grow bg-stone-200"></div>
             </div>
             <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -65,7 +65,7 @@ export async function renderHome(container) {
         </div>
         
         <div class="flex items-center gap-4 mb-8">
-                <h3 class="text-2xl font-headings font-bold text-stone-800">Todos los comercios de Villa Carmela</h3>
+                <h3 class="text-2xl font-headings font-bold text-stone-800">Todos los comercios y servicios de Villa Carmela</h3>
                 <div class="h-px flex-grow bg-stone-200"></div>
         </div>
 
