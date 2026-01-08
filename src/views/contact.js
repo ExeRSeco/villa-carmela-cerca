@@ -51,7 +51,7 @@ export const Contact = () => {
                     <h3 class="text-xl font-bold font-headings text-stone-800 mb-2">Plan Destacado</h3>
                     <p class="text-stone-500 text-sm mb-6">Máxima exposición para tu negocio.</p>
                     <div class="flex items-baseline mb-8">
-                        <span class="text-4xl font-bold text-spa-600">$10.000</span>
+                        <span class="text-4xl font-bold text-spa-600">$7.000</span>
                         <span class="text-stone-500 ml-2">/mes</span>
                     </div>
                     <ul class="space-y-4 text-stone-600 mb-8">
