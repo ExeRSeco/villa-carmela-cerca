@@ -43,6 +43,23 @@ export const BusinessForm = (id = null) => {
             // Default category
             if (!business.category && categories.length > 0) business.category = categories[0];
 
+            // Parse Hours if V2
+            let hoursData = {
+                shift1Start: '', shift1End: '',
+                shift2Start: '', shift2End: ''
+            };
+
+            if (business.hours && business.hours.format === 'v2') {
+                if (business.hours.shifts[0]) {
+                    hoursData.shift1Start = business.hours.shifts[0].start;
+                    hoursData.shift1End = business.hours.shifts[0].end;
+                }
+                if (business.hours.shifts[1]) {
+                    hoursData.shift2Start = business.hours.shifts[1].start;
+                    hoursData.shift2End = business.hours.shifts[1].end;
+                }
+            }
+
             // Render Form
             container.innerHTML = `
             <div class="max-w-3xl mx-auto animate-fade-in-up mb-10">
@@ -89,28 +106,36 @@ export const BusinessForm = (id = null) => {
                                 <input type="text" name="address" value="${escapeHTML(business.address || '')}" required class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-stone-700 mb-1">Teléfono</label>
-                                <input type="text" name="phone" value="${escapeHTML(business.phone || '')}" class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-stone-700 mb-1">WhatsApp (Número limpio)</label>
-                                <input type="text" name="whatsapp" value="${escapeHTML(business.whatsapp || '')}" placeholder="54911..." class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-stone-700 mb-1">Etiquetas (separadas por coma)</label>
-                                <input type="text" name="tags" value="${escapeHTML(business.tags ? business.tags.join(', ') : '')}" placeholder="Pizza, Empanadas..." class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none">
+                                <label class="block text-sm font-medium text-stone-700 mb-1">WhatsApp (Solo números)</label>
+                                <input type="text" name="whatsapp" value="${escapeHTML(business.whatsapp || '')}" placeholder="381..." class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none">
                             </div>
                         </div>
                     </div>
 
                     <!-- Details -->
                     <div class="space-y-6">
-                        <h3 class="text-lg font-bold text-stone-800 border-b border-stone-100 pb-2">Detalles y Estado</h3>
-                        <div>
-                            <label class="block text-sm font-medium text-stone-700 mb-1">Horarios (Una línea por ítem)</label>
-                            <textarea name="hours" rows="3" class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none">${escapeHTML(Array.isArray(business.hours) ? business.hours.join('\n') : (business.hours || ''))}</textarea>
+                        <h3 class="text-lg font-bold text-stone-800 border-b border-stone-100 pb-2">Horarios y Atención</h3>
+                        
+                        <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-bold text-stone-700 mb-2">Turno Mañana / Horario Corrido</label>
+                                    <div class="flex gap-2 items-center">
+                                        <input type="time" name="shift1Start" value="${hoursData.shift1Start}" class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-spa-400">
+                                        <span class="text-stone-400">a</span>
+                                        <input type="time" name="shift1End" value="${hoursData.shift1End}" class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-spa-400">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-stone-700 mb-2">Turno Tarde (Opcional)</label>
+                                    <div class="flex gap-2 items-center">
+                                        <input type="time" name="shift2Start" value="${hoursData.shift2Start}" class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-spa-400">
+                                        <span class="text-stone-400">a</span>
+                                        <input type="time" name="shift2End" value="${hoursData.shift2End}" class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-spa-400">
+                                    </div>
+                                    <p class="text-xs text-stone-400 mt-1">Deja vacío si es horario corrido.</p>
+                                </div>
+                            </div>
                         </div>
                         
                         <div>
@@ -124,9 +149,9 @@ export const BusinessForm = (id = null) => {
                         </div>
 
                         <div class="flex gap-6 pt-2">
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="isOpen" ${business.isOpen ? 'checked' : ''} class="w-4 h-4 text-spa-600 rounded focus:ring-spa-500">
-                                <span class="text-stone-700">Abierto Ahora</span>
+                             <label class="flex items-center space-x-2 cursor-pointer" title="Marcar para forzar estado Abierto si es feriado o fuera de hora">
+                                <input type="checkbox" name="isOpen" ${business.isOpen ? 'checked' : ''} class="w-4 h-4 text-green-600 rounded focus:ring-green-500">
+                                <span class="text-stone-700">Forzar "Abierto"</span>
                             </label>
                             <label class="flex items-center space-x-2 cursor-pointer">
                                 <input type="checkbox" name="delivery" ${business.delivery ? 'checked' : ''} class="w-4 h-4 text-spa-600 rounded focus:ring-spa-500">
@@ -193,8 +218,30 @@ export const BusinessForm = (id = null) => {
                 btn.disabled = true;
                 btn.textContent = 'Guardando...';
 
-                const tags = formData.get('tags').split(',').map(s => s.trim()).filter(s => s);
-                const hours = formData.get('hours').split('\n').map(s => s.trim()).filter(s => s);
+                // Construct V2 Hours Object
+                const s1Start = formData.get('shift1Start');
+                const s1End = formData.get('shift1End');
+                const s2Start = formData.get('shift2Start');
+                const s2End = formData.get('shift2End');
+
+                let shifts = [];
+                let displayParts = [];
+
+                if (s1Start && s1End) {
+                    shifts.push({ start: s1Start, end: s1End });
+                    displayParts.push(`${s1Start} - ${s1End}`);
+                }
+                if (s2Start && s2End) {
+                    shifts.push({ start: s2Start, end: s2End });
+                    displayParts.push(`${s2Start} - ${s2End}`);
+                }
+
+                const hoursV2 = {
+                    format: 'v2',
+                    shifts: shifts,
+                    display: displayParts.length > 0 ? displayParts.join(' / ') : 'Consultar'
+                };
+
                 const paymentMethods = formData.get('paymentMethods').split(',').map(s => s.trim()).filter(s => s);
 
                 // Handle Image Upload
@@ -211,7 +258,7 @@ export const BusinessForm = (id = null) => {
                         id: id ? Number(id) : null,
                         name: formData.get('name'),
                         category: formData.get('category'),
-                        phone: formData.get('phone'),
+                        // Phone removed
                         whatsapp: formData.get('whatsapp'),
                         address: formData.get('address'),
                         image: imageUrl,
@@ -222,8 +269,8 @@ export const BusinessForm = (id = null) => {
                         startDate: formData.get('startDate'),
                         expirationDate: formData.get('expirationDate'),
                         promotions: formData.get('promotions') || null,
-                        tags,
-                        hours,
+                        tags: [], // Tags removed, sending empty array
+                        hours: hoursV2,
                         paymentMethods
                     };
 
