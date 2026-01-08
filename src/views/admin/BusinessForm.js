@@ -114,9 +114,15 @@ export const BusinessForm = (id = null) => {
 
                     <!-- Details -->
                     <div class="space-y-6">
-                        <h3 class="text-lg font-bold text-stone-800 border-b border-stone-100 pb-2">Horarios y Atención</h3>
+                        <div class="flex justify-between items-center border-b border-stone-100 pb-2">
+                             <h3 class="text-lg font-bold text-stone-800">Horarios y Atención</h3>
+                             <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" name="is24Hours" id="is24Hours-check" ${hoursData.is24Hours ? 'checked' : ''} class="w-4 h-4 text-spa-600 rounded focus:ring-spa-500">
+                                <span class="text-stone-700 font-bold text-sm">Abierto 24 Horas</span>
+                            </label>
+                        </div>
                         
-                        <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                        <div id="hours-inputs" class="bg-stone-50 p-4 rounded-xl border border-stone-200 transition-opacity duration-300 ${hoursData.is24Hours ? 'opacity-50 pointer-events-none' : ''}">
                              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-bold text-stone-700 mb-2">Turno Mañana / Horario Corrido</label>
@@ -198,6 +204,18 @@ export const BusinessForm = (id = null) => {
 
             const form = document.getElementById('business-form');
 
+            // 24H Toggle
+            const is24HoursCheck = form.querySelector('#is24Hours-check');
+            const hoursInputs = form.querySelector('#hours-inputs');
+
+            is24HoursCheck.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    hoursInputs.classList.add('opacity-50', 'pointer-events-none');
+                } else {
+                    hoursInputs.classList.remove('opacity-50', 'pointer-events-none');
+                }
+            });
+
             // Auto-calculate expiration logic
             const startDateInput = form.querySelector('[name="startDate"]');
             const expirationDateInput = form.querySelector('[name="expirationDate"]');
@@ -236,11 +254,22 @@ export const BusinessForm = (id = null) => {
                     displayParts.push(`${s2Start} - ${s2End}`);
                 }
 
-                const hoursV2 = {
-                    format: 'v2',
-                    shifts: shifts,
-                    display: displayParts.length > 0 ? displayParts.join(' / ') : 'Consultar'
-                };
+                let hoursV2;
+                if (is24HoursCheck.checked) {
+                    hoursV2 = {
+                        format: 'v2',
+                        is24Hours: true,
+                        shifts: [],
+                        display: 'Abierto las 24hs'
+                    };
+                } else {
+                    hoursV2 = {
+                        format: 'v2',
+                        is24Hours: false,
+                        shifts: shifts,
+                        display: displayParts.length > 0 ? displayParts.join(' / ') : 'Consultar'
+                    };
+                }
 
                 const paymentMethods = formData.get('paymentMethods').split(',').map(s => s.trim()).filter(s => s);
 

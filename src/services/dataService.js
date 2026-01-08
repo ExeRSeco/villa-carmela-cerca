@@ -80,6 +80,12 @@ export const dataService = {
             if (error) throw error;
         } else {
             // Create
+            // Inject user_id for RLS
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                payload.user_id = user.id;
+            }
+
             const { error } = await supabase
                 .from('businesses')
                 .insert([payload]);
