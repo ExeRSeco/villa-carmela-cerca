@@ -22,7 +22,7 @@ export async function renderHome(container) {
         <div class="bg-gradient-to-r from-spa-600 to-spa-500 rounded-2xl p-6 md:p-8 mb-10 text-white shadow-lg relative overflow-hidden animate-fade-in-up">
             <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="text-center md:text-left">
-                    <h3 class="text-2xl font-headings font-bold mb-2">¿Tienes un negocio?</h3>
+                    <h3 class="text-2xl font-headings font-bold mb-2">¿Tienes un negocio en Villa Carmela?</h3>
                     <p class="text-spa-100 font-light">Publicita con nosotros desde <span class="font-bold text-white">$5.000/mes</span></p>
                 </div>
                 <button id="banner-contact-btn" class="bg-white text-spa-900 px-6 py-3 rounded-full font-bold shadow-md hover:bg-stone-50 hover:scale-105 transition-all duration-300">
@@ -37,16 +37,13 @@ export async function renderHome(container) {
         <!-- Search Bar Section -->
         <div class="bg-white border-b border-stone-100 py-6 mb-10 rounded-2xl shadow-sm" id="search-container">
             <div class="px-4">
-                 <div class="relative max-w-sm mx-auto"> <!-- Changed max-w-2xl to max-w-sm for dropdown look -->
-                    <select id="category-select" class="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-spa-200 focus:border-spa-400 transition-all shadow-sm text-stone-700 appearance-none cursor-pointer">
-                        <option value="">Todas las Categorías</option>
-                        <!-- Options injected by JS -->
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-stone-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                 <div class="relative max-w-lg mx-auto">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
+                    <input type="text" id="category-search" placeholder="Busca comercios por rubro en Villa Carmela" class="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 bg-stone-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-spa-200 focus:border-spa-400 transition-all shadow-sm text-stone-700 placeholder-stone-400">
                 </div>
             </div>
         </div>
@@ -89,7 +86,7 @@ export async function renderHome(container) {
 
         const grid = container.querySelector('#business-grid')
         const featuredGrid = container.querySelector('#featured-grid')
-        const categorySelect = container.querySelector('#category-select')
+        const categorySearch = container.querySelector('#category-search')
         const loadingSentinel = container.querySelector('#loading-sentinel')
         const bannerContactBtn = container.querySelector('#banner-contact-btn')
 
@@ -170,12 +167,7 @@ export async function renderHome(container) {
         }
 
         // Populate Categories
-        categories.forEach(cat => {
-            const option = document.createElement('option')
-            option.value = cat
-            option.textContent = cat
-            categorySelect.appendChild(option)
-        })
+        // Categories not needed for input search
 
         // Render Featured
         const featuredBusinesses = businesses.filter(b => b.isFeatured)
@@ -192,11 +184,14 @@ export async function renderHome(container) {
         renderCards(filteredData.slice(0, displayedCount))
 
         // Event Listener: Category Filter
-        categorySelect.addEventListener('change', (e) => {
-            const selectedCategory = e.target.value
+        // Event Listener: Category Search
+        categorySearch.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim()
 
-            if (selectedCategory) {
-                filteredData = businesses.filter(business => business.category === selectedCategory)
+            if (searchTerm) {
+                filteredData = businesses.filter(business =>
+                    business.category.toLowerCase().includes(searchTerm)
+                )
             } else {
                 filteredData = [...businesses]
             }
