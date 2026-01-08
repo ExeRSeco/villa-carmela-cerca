@@ -49,7 +49,7 @@ export const Modal = (data) => {
 
                          <div class="flex items-center gap-3 text-stone-600 hover:text-green-600 transition-colors cursor-pointer group" data-action="whatsapp" data-phone="${safeWhatsapp || safePhone}">
                             <span class="text-spa-400 group-hover:text-green-500 mt-1 group-hover:scale-110 transition-transform">${PhoneIcon()}</span>
-                            <span class="group-hover:underline decoration-green-300 decoration-2 underline-offset-2">${safePhone}</span>
+                            <span class="group-hover:underline decoration-green-300 decoration-2 underline-offset-2">${safeWhatsapp || safePhone}</span>
                         </div>
                         
                         <div class="flex items-center gap-2">
@@ -58,22 +58,28 @@ export const Modal = (data) => {
                                 ${data.isOpen ? 'Abierto ahora' : 'Cerrado'}
                              </span>
                         </div>
+
+                         <!-- Clarification Section -->
+                         ${data.clarification ? `
+                         <div class="bg-blue-50 border border-blue-100 p-3 rounded-lg flex gap-2 text-sm text-blue-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                            <p>${escapeHTML(data.clarification)}</p>
+                         </div>
+                         ` : ''}
                     </div>
 
                     <!-- Hours & Tags -->
                     <div class="bg-stone-50 rounded-xl p-5 border border-stone-100">
                         <h4 class="font-bold text-stone-800 mb-3">Horarios</h4>
                         <div class="space-y-1">
-                             ${Array.isArray(data.hours) ? data.hours.map(hour => `
-                                <div class="text-sm text-stone-600 flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-spa-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    ${escapeHTML(hour)}
-                                </div>
-                             `).join('') : `
-                                <div class="text-sm text-stone-600">${escapeHTML(data.hours)}</div>
-                             `}
+                             <div class="text-sm text-stone-600 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-spa-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                ${data.hours && data.hours.display ? escapeHTML(data.hours.display) : 'Consultar'}
+                            </div>
                         </div>
                         <div class="mt-4 flex flex-wrap gap-2">
                             ${data.tags.map(tag => `<span class="text-xs bg-white border border-stone-200 px-2 py-1 rounded-md text-stone-500">${escapeHTML(tag)}</span>`).join('')}

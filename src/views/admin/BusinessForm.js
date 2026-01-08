@@ -154,6 +154,11 @@ export const BusinessForm = (id = null) => {
                             <input type="text" name="promotions" value="${escapeHTML(business.promotions || '')}" class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none">
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Aclaraciones (Opcional - Máx 150 caracteres)</label>
+                            <textarea name="clarification" maxlength="150" rows="2" class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none resize-none" placeholder="Ej: Solo con reservas, No aceptamos mascotas...">${escapeHTML(business.clarification || '')}</textarea>
+                        </div>
+
                         <div class="flex gap-6 pt-2">
                              <label class="flex items-center space-x-2 cursor-pointer" title="Marcar para forzar estado Abierto si es feriado o fuera de hora">
                                 <input type="checkbox" name="isOpen" ${business.isOpen ? 'checked' : ''} class="w-4 h-4 text-green-600 rounded focus:ring-green-500">
@@ -298,6 +303,7 @@ export const BusinessForm = (id = null) => {
                         startDate: formData.get('startDate'),
                         expirationDate: formData.get('expirationDate'),
                         promotions: formData.get('promotions') || null,
+                        clarification: formData.get('clarification') || null,
                         tags: [], // Tags removed, sending empty array
                         hours: hoursV2,
                         paymentMethods

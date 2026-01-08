@@ -19,7 +19,8 @@ const mapFromDb = (b) => ({
     hours: b.hours, // JSONB comes as object/array automatically
     tags: b.tags,
     paymentMethods: b.payment_methods,
-    promotions: b.promotions
+    promotions: b.promotions,
+    clarification: b.clarification
 });
 
 // Helper to Map App to DB
@@ -40,7 +41,8 @@ const mapToDb = (b) => ({
     hours: b.hours,
     tags: b.tags,
     payment_methods: b.paymentMethods,
-    promotions: b.promotions
+    promotions: b.promotions,
+    clarification: b.clarification
 });
 
 export const dataService = {
