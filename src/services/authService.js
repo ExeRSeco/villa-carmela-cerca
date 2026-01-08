@@ -15,6 +15,7 @@ export const authService = {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
         window.location.hash = '#admin/login';
+        window.location.reload();
     },
 
     async getUser() {
