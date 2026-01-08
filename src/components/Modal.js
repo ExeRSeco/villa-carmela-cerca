@@ -1,4 +1,4 @@
-import { LocationIcon, PhoneIcon, StarIcon, LinkIcon } from './Card.js';
+import { LocationIcon, PhoneIcon, StarIcon, LinkIcon, getSmartStatus } from './Card.js';
 import { escapeHTML } from '../utils.js';
 
 export const Modal = (data) => {
@@ -8,6 +8,8 @@ export const Modal = (data) => {
     const safePhone = escapeHTML(data.phone);
     const safeWhatsapp = escapeHTML(data.whatsapp);
     const safePromotions = escapeHTML(data.promotions);
+
+    const smartStatus = getSmartStatus(data.hours, data.isOpen);
 
     return `
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4" id="business-modal">
@@ -53,9 +55,9 @@ export const Modal = (data) => {
                         </div>
                         
                         <div class="flex items-center gap-2">
-                             <div class="w-2 h-2 rounded-full ${data.isOpen ? 'bg-green-500' : 'bg-red-500'}"></div>
-                             <span class="text-sm font-medium ${data.isOpen ? 'text-green-600' : 'text-stone-500'}">
-                                ${data.isOpen ? 'Abierto ahora' : 'Cerrado'}
+                             <div class="w-2 h-2 rounded-full ${smartStatus.text === 'Abierto' ? 'bg-green-500' : smartStatus.text === 'Cerrado' ? 'bg-stone-400' : 'bg-yellow-500'}"></div>
+                             <span class="text-sm font-medium ${smartStatus.class}">
+                                ${smartStatus.text}
                              </span>
                         </div>
 

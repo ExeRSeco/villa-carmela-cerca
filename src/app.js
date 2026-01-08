@@ -106,7 +106,7 @@ export async function renderHome(container) {
                 e.stopPropagation()
                 const address = mapBtn.dataset.address
                 if (address) {
-                    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank')
+                    window.open(`https://www.google.com/maps?q=${encodeURIComponent(address)}`, '_blank')
                 }
                 return
             }

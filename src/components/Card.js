@@ -25,7 +25,7 @@ export function StarIcon() {
 </svg>`
 }
 
-function getSmartStatus(hoursData, isOpenOverride) {
+export function getSmartStatus(hoursData, isOpenOverride) {
     if (!hoursData) {
         // Fallback or Legacy
         return isOpenOverride
