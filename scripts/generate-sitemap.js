@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // CONFIGURATION
-const BASE_URL = 'https://villacarmelacerca.com'; // TODO: Update with real domain
+const BASE_URL = 'https://villacarmelacerca.com.ar';
 
 const staticRoutes = [
     { url: '/', changefreq: 'daily', priority: 1.0 },
