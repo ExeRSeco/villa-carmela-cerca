@@ -79,7 +79,7 @@ export async function renderHome(container, targetSlug = null) {
         </div>
 
         <footer class="mt-20 border-t border-stone-100 py-10 text-center">
-            <p class="text-stone-400 text-sm mb-4">© 2024 Villa Carmela Cerca. Todos los derechos reservados.</p>
+            <p class="text-stone-400 text-sm mb-4">© 2026 Villa Carmela Cerca. Todos los derechos reservados.</p>
             <a href="#admin" class="text-stone-300 hover:text-stone-500 text-xs transition-colors font-medium">Soy Dueño</a>
         </footer>
         `;
@@ -115,7 +115,19 @@ export async function renderHome(container, targetSlug = null) {
                 e.stopPropagation()
                 const phone = whatsappBtn.dataset.phone
                 if (phone) {
-                    const cleanPhone = phone.replace(/\D/g, '')
+                    let cleanPhone = phone.replace(/\D/g, '')
+
+                    // Logic to ensure 549 prefix for Argentina
+                    // If it starts with 11 or other local area code without 54/9
+                    // Heuristic: If length is 10 (e.g. 11 1234 5678), add 549
+                    // If starts with 54 but not 549 (rare but possible mistake), insert 9
+
+                    if (!cleanPhone.startsWith('54')) {
+                        cleanPhone = '549' + cleanPhone;
+                    } else if (cleanPhone.startsWith('54') && !cleanPhone.startsWith('549')) {
+                        cleanPhone = cleanPhone.replace('54', '549');
+                    }
+
                     window.open(`https://wa.me/${cleanPhone}`, '_blank')
                 }
                 return

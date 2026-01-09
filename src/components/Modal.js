@@ -1,4 +1,4 @@
-import { LocationIcon, PhoneIcon, StarIcon, LinkIcon, getSmartStatus } from './Card.js';
+import { LocationIcon, PhoneIcon, getSmartStatus } from './Card.js';
 import { escapeHTML } from '../utils.js';
 
 export const Modal = (data) => {
@@ -44,14 +44,14 @@ export const Modal = (data) => {
                     <!-- Basic Info -->
                     <div class="space-y-4">
                         
-                         <div class="flex items-start gap-3 text-stone-600 hover:text-spa-600 transition-colors cursor-pointer group" data-action="map" data-address="${safeAddress}">
-                            <span class="text-spa-400 mt-1 group-hover:scale-110 transition-transform">${LocationIcon()}</span>
-                            <span class="group-hover:underline decoration-spa-300 decoration-2 underline-offset-2">${safeAddress}</span>
+                         <div class="flex items-start gap-3 text-stone-600">
+                            <span class="text-spa-400 mt-1">${LocationIcon()}</span>
+                            <span>${safeAddress}</span>
                         </div>
 
-                         <div class="flex items-center gap-3 text-stone-600 hover:text-green-600 transition-colors cursor-pointer group" data-action="whatsapp" data-phone="${safeWhatsapp || safePhone}">
-                            <span class="text-spa-400 group-hover:text-green-500 mt-1 group-hover:scale-110 transition-transform">${PhoneIcon()}</span>
-                            <span class="group-hover:underline decoration-green-300 decoration-2 underline-offset-2">${safeWhatsapp || safePhone}</span>
+                         <div class="flex items-center gap-3 text-stone-600">
+                            <span class="text-spa-400 mt-1">${PhoneIcon()}</span>
+                            <span>${safeWhatsapp || safePhone}</span>
                         </div>
                         
                         <div class="flex items-center gap-2">

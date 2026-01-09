@@ -56,7 +56,7 @@ document.querySelector('#app').innerHTML = `
         </div>
         </div>
         <div class="border-t border-stone-800 pt-8 text-center text-xs text-stone-500">
-            <p>&copy; 2024 Villa Carmela Cerca. Todos los derechos reservados.</p>
+            <p>&copy; 2026 Villa Carmela Cerca. Todos los derechos reservados.</p>
         </div>
     </div>
 </footer>
