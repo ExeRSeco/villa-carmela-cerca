@@ -11,8 +11,6 @@ const BASE_URL = 'https://villacarmelacerca.com'; // TODO: Update with real doma
 
 const staticRoutes = [
     { url: '/', changefreq: 'daily', priority: 1.0 },
-    { url: '/about', changefreq: 'monthly', priority: 0.8 },
-    { url: '/contact', changefreq: 'monthly', priority: 0.8 },
 ];
 
 function generateSitemap() {
@@ -20,18 +18,7 @@ function generateSitemap() {
 
     const routes = [...staticRoutes];
 
-    // Add Business Routes
-    businesses.forEach(business => {
-        if (!business.isOpen) return; // Exclude inactive businesses
-
-        const priority = business.isFeatured ? 0.9 : 0.8;
-
-        routes.push({
-            url: `/business/${business.slug}`,
-            changefreq: 'weekly',
-            priority: priority
-        });
-    });
+    // NOTE: Removed dynamic and client-side routes to ensure only server-backed URLs are indexed.
 
     const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
