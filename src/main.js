@@ -74,22 +74,25 @@ const footerContactLinkBtn = document.querySelector('#footer-contact-link-btn')
 
 // Routing Logic
 async function router() {
-    const hash = window.location.hash || '#';
+    const path = window.location.pathname;
 
     // Reset active states
     navHome.classList.remove('text-spa-600', 'font-bold')
     navAbout.classList.remove('text-spa-600', 'font-bold')
     navContact.classList.remove('text-spa-600', 'font-bold')
-    mainContent.innerHTML = ''
-    window.scrollTo(0, 0)
+
+    // Only clear content if not opening a modal on home
+    // But since we want "pages", let's keep it simple: always clear unless it's a modal over home?
+    // Actually, design: Business Modal is over Home.
+    // implementation: if path is /business/:id, render Home then Open Modal.
 
     // Admin Routes
-    if (hash.startsWith('#admin')) {
+    if (path.startsWith('/admin')) {
         const isAuth = await authService.isAuthenticated();
 
-        if (hash === '#admin/login') {
+        if (path === '/admin/login') {
             if (isAuth) {
-                window.location.hash = '#admin/dashboard';
+                navigateTo('/admin/dashboard');
                 return;
             }
             mainContent.innerHTML = Login();
@@ -97,63 +100,88 @@ async function router() {
         }
 
         if (!isAuth) {
-            window.location.hash = '#admin/login';
+            navigateTo('/admin/login');
             return;
         }
 
-        if (hash === '#admin/dashboard') {
+        mainContent.innerHTML = ''; // Clear for admin
+
+        if (path === '/admin/dashboard') {
             mainContent.innerHTML = Dashboard();
-        } else if (hash === '#admin/categories') {
+        } else if (path === '/admin/categories') {
             mainContent.innerHTML = CategoryManager();
-        } else if (hash === '#admin/new') {
+        } else if (path === '/admin/new') {
             mainContent.innerHTML = BusinessForm();
-        } else if (hash.startsWith('#admin/edit/')) {
-            const id = hash.split('/').pop();
+        } else if (path.startsWith('/admin/edit/')) {
+            const id = path.split('/').pop();
             mainContent.innerHTML = BusinessForm(id);
         } else {
-            // Fallback for unknown admin routes
             mainContent.innerHTML = Dashboard();
         }
         return;
     }
 
     // Public Routes
-    if (hash === '#about') {
+    if (path === '/about') {
         mainContent.innerHTML = About()
         navAbout.classList.add('text-spa-600', 'font-bold')
         document.title = 'Nosotros - Villa Carmela Cerca'
-    } else if (hash === '#contact') {
+    } else if (path === '/contact') {
         const contactHTML = Contact()
         mainContent.innerHTML = contactHTML
         navContact.classList.add('text-spa-600', 'font-bold')
         document.title = 'Publicita - Villa Carmela Cerca'
+    } else if (path.startsWith('/business/')) {
+        // Business Permalink
+        const slug = path.split('/')[2];
+        mainContent.innerHTML = '';
+        renderHome(mainContent, slug)
+        navHome.classList.add('text-spa-600', 'font-bold')
     } else {
         // Default Home
+        mainContent.innerHTML = '';
         renderHome(mainContent)
         navHome.classList.add('text-spa-600', 'font-bold')
         document.title = 'Villa Carmela Cerca - Guía de Comercios y Servicios'
     }
 }
 
-// Event Listeners for Nav (Updating Hash)
-navHome.addEventListener('click', (e) => { e.preventDefault(); window.location.hash = ''; })
-navAbout.addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#about'; })
-navContact.addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#contact'; })
-logoBtn.addEventListener('click', () => { window.location.hash = ''; })
-footerAboutBtn.addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#about'; })
-footerContactBtn.addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#contact'; })
-footerContactLinkBtn.addEventListener('click', (e) => { e.preventDefault(); window.location.hash = '#contact'; })
+// History API Navigation Helper
+window.navigateTo = (url) => {
+    history.pushState(null, null, url);
+    router();
+};
+
+// Event Listeners for Nav
+// We will intercept clicks globally now, but keep ID references for specific Logic if needed or remove them.
+// Let's attach specific listeners to our nav elements to be safe and explicit, calling navigateTo
+
+navHome.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/'); })
+navAbout.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/about'); })
+navContact.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/contact'); })
+logoBtn.addEventListener('click', () => { navigateTo('/'); })
+footerAboutBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/about'); })
+footerContactBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/contact'); })
+footerContactLinkBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/contact'); })
 
 // Listen for custom navigation events
 document.addEventListener('navigate-to', (e) => {
     if (e.detail && e.detail.view) {
-        if (e.detail.view === 'home') window.location.hash = '';
-        else window.location.hash = '#' + e.detail.view;
+        if (e.detail.view === 'home') navigateTo('/');
+        else navigateTo('/' + e.detail.view);
     }
 })
 
-window.addEventListener('hashchange', router)
-window.addEventListener('load', router)
+// Global Link Interceptor (Delegate)
+document.addEventListener('click', e => {
+    if (e.target.matches('[data-link]')) {
+        e.preventDefault();
+        navigateTo(e.target.href);
+    }
+});
+
+window.addEventListener('popstate', router);
+window.addEventListener('DOMContentLoaded', router);
 
 // Auto Logout Logic
 let idleTimer;
@@ -161,11 +189,11 @@ const TIMEOUT = 2 * 60 * 1000; // 2 Minutes
 
 const resetIdleTimer = () => {
     // Only apply if in admin
-    if (window.location.hash.startsWith('#admin')) {
+    if (window.location.pathname.startsWith('/admin')) {
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
             // Double check we are still in admin before logging out
-            if (window.location.hash.startsWith('#admin')) {
+            if (window.location.pathname.startsWith('/admin')) {
                 authService.logout();
             }
         }, TIMEOUT);

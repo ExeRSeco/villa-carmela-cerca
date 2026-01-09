@@ -1,6 +1,7 @@
 export const businesses = [
     {
         id: 1,
+        slug: "farmacia-oasis",
         name: "Farmacia Oasis",
         category: "Farmacias",
         rating: 4.8,
@@ -19,6 +20,7 @@ export const businesses = [
     },
     {
         id: 2,
+        slug: "maxikiosco-matcha",
         name: "Maxikiosco Matcha",
         category: "Almacenes / Kioscos",
         rating: 4.5,
@@ -36,6 +38,7 @@ export const businesses = [
     },
     {
         id: 3,
+        slug: "carniceria-el-corte",
         name: "Carnicería El Corte",
         category: "Carnicerías",
         rating: 4.9,
@@ -53,6 +56,7 @@ export const businesses = [
     },
     {
         id: 4,
+        slug: "la-boulangerie",
         name: "La Boulangerie",
         category: "Panaderías",
         rating: 4.7,
@@ -70,6 +74,7 @@ export const businesses = [
     },
     {
         id: 5,
+        slug: "pizzeria-zen",
         name: "Pizzería Zen",
         category: "Comida (rotiserías, pizzerías)",
         rating: 5.0,
@@ -87,6 +92,7 @@ export const businesses = [
     },
     {
         id: 6,
+        slug: "burger-joint",
         name: "Burger Joint",
         category: "Comida (rotiserías, pizzerías)",
         rating: 4.6,
@@ -105,6 +111,7 @@ export const businesses = [
     },
     {
         id: 7,
+        slug: "verduleria-bloom",
         name: "Verdulería Bloom",
         category: "Verdulerías",
         rating: 4.4,
@@ -122,6 +129,7 @@ export const businesses = [
     },
     {
         id: 8,
+        slug: "almacen-urban",
         name: "Almacén Urban",
         category: "Almacenes / Kioscos",
         rating: 4.8,
@@ -140,6 +148,7 @@ export const businesses = [
     },
     {
         id: 9,
+        slug: "farmacia-vitality",
         name: "Farmacia Vitality",
         category: "Farmacias",
         rating: 4.9,
@@ -157,6 +166,7 @@ export const businesses = [
     },
     {
         id: 10,
+        slug: "carniceria-artesanal",
         name: "Carnicería Artesanal",
         category: "Carnicerías",
         rating: 4.7,
@@ -174,6 +184,7 @@ export const businesses = [
     },
     {
         id: 11,
+        slug: "natural-market",
         name: "Natural Market",
         category: "Verdulerías",
         rating: 4.6,
@@ -191,6 +202,7 @@ export const businesses = [
     },
     {
         id: 12,
+        slug: "panaderia-la-espiga",
         name: "Panadería La Espiga",
         category: "Panaderías",
         rating: 4.5,

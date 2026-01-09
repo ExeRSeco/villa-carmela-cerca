@@ -2,7 +2,7 @@ import { dataService } from './services/dataService.js'
 import { Card } from './components/Card.js'
 import { Modal } from './components/Modal.js'
 
-export async function renderHome(container) {
+export async function renderHome(container, targetSlug = null) {
     // Show Loading State
     container.innerHTML = `
         <div class="flex items-center justify-center min-h-screen">
@@ -249,6 +249,16 @@ export async function renderHome(container) {
 
         if (filteredData.length > displayedCount) {
             observer.observe(loadingSentinel)
+        }
+
+        // Open Permalink Modal
+        if (targetSlug) {
+            const targetBusiness = businesses.find(b => b.slug === targetSlug)
+            if (targetBusiness) {
+                openModal(targetBusiness)
+                // Update title for SEO/Sharing
+                document.title = `${targetBusiness.name} - Villa Carmela Cerca`
+            }
         }
     } catch (error) {
         console.error("Failed to load data", error);
