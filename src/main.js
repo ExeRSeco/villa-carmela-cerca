@@ -16,7 +16,7 @@ document.querySelector('#app').innerHTML = `
     <div class="container mx-auto px-4 h-20 flex items-center justify-between">
         <div class="flex items-center gap-2 cursor-pointer" id="logo-btn">
             <img src="/logo.png" alt="VC Logo" class="w-10 h-10 rounded-full object-cover">
-            <h1 class="text-2xl font-headings font-bold text-spa-900 tracking-tight">Guía de Comercios y Servicios en Villa Carmela</h1>
+            <span class="text-2xl font-headings font-bold text-spa-900 tracking-tight">Villa Carmela Cerca</span>
         </div>
         <div class="hidden md:block">
             <nav class="flex gap-6 text-stone-600 font-medium">
