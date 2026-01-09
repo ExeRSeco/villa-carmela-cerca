@@ -64,7 +64,7 @@ export const BusinessForm = (id = null) => {
             container.innerHTML = `
             <div class="max-w-3xl mx-auto animate-fade-in-up mb-10">
                 <div class="flex items-center mb-6">
-                    <a href="#admin/dashboard" class="text-stone-500 hover:text-stone-800 mr-4">
+                    <a href="/admin/dashboard" data-link class="text-stone-500 hover:text-stone-800 mr-4">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     </a>
                     <h2 class="text-2xl font-bold font-headings text-stone-900">${id ? 'Editar Local' : 'Nuevo Local'}</h2>
@@ -199,7 +199,7 @@ export const BusinessForm = (id = null) => {
                     </div>
 
                     <div class="pt-6 border-t border-stone-100 flex justify-end gap-3">
-                        <a href="#admin/dashboard" class="px-6 py-2 rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-50 font-bold">Cancelar</a>
+                        <a href="/admin/dashboard" data-link class="px-6 py-2 rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-50 font-bold">Cancelar</a>
                         <button type="submit" class="px-6 py-2 rounded-lg bg-stone-900 text-white hover:bg-stone-800 font-bold shadow-lg">Guardar Local</button>
                     </div>
 
@@ -311,7 +311,7 @@ export const BusinessForm = (id = null) => {
 
                     btn.textContent = 'Guardando...';
                     await dataService.save(newItem);
-                    window.location.hash = '#admin/dashboard';
+                    window.navigateTo('/admin/dashboard');
                 } catch (err) {
                     alert('Error: ' + err.message);
                     btn.disabled = false;

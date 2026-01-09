@@ -22,12 +22,12 @@ export const Dashboard = () => {
                 <div class="flex justify-between items-center mb-8">
                     <h2 class="text-3xl font-bold font-headings text-stone-900">Panel de Control</h2>
                     <div class="flex gap-4">
-                    <a href="#admin/categories" class="bg-stone-100 text-stone-700 px-4 py-2 rounded-lg hover:bg-stone-200 transition-colors font-medium flex items-center border border-stone-200">
+                    <a href="/admin/categories" data-link class="bg-stone-100 text-stone-700 px-4 py-2 rounded-lg hover:bg-stone-200 transition-colors font-medium flex items-center border border-stone-200">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                         </svg>
                         Categorías
                     </a>
-                        <a href="#admin/new" class="bg-spa-600 text-white px-4 py-2 rounded-lg hover:bg-spa-500 transition-colors font-medium flex items-center">
+                        <a href="/admin/new" data-link class="bg-spa-600 text-white px-4 py-2 rounded-lg hover:bg-spa-500 transition-colors font-medium flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             Nuevo Local
                         </a>
@@ -91,7 +91,7 @@ export const Dashboard = () => {
                                         ${b.isFeatured ? '<span class="ml-2 px-2 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 border border-yellow-200">Destacado</span>' : ''}
                                     </td>
                                     <td class="px-6 py-4 text-right space-x-2">
-                                        <a href="#admin/edit/${b.id}" class="text-spa-600 hover:text-spa-800 font-medium">Editar</a>
+                                        <a href="/admin/edit/${b.id}" data-link class="text-spa-600 hover:text-spa-800 font-medium">Editar</a>
                                         <button data-id="${b.id}" class="delete-btn text-red-500 hover:text-red-700 font-medium">Eliminar</button>
                                     </td>
                                 </tr>
@@ -156,7 +156,7 @@ export const Dashboard = () => {
                             </div>
                             
                             <div class="flex gap-2 pt-3 border-t border-stone-100">
-                                <a href="#admin/edit/${b.id}" class="flex-1 text-center bg-stone-100 text-spa-600 hover:bg-spa-50 py-2 rounded-lg text-sm font-bold transition-colors">Editar</a>
+                                <a href="/admin/edit/${b.id}" data-link class="flex-1 text-center bg-stone-100 text-spa-600 hover:bg-spa-50 py-2 rounded-lg text-sm font-bold transition-colors">Editar</a>
                                 <button data-id="${b.id}" class="delete-btn flex-1 text-center bg-stone-100 text-red-500 hover:bg-red-50 py-2 rounded-lg text-sm font-bold transition-colors">Eliminar</button>
                             </div>
                         </div>

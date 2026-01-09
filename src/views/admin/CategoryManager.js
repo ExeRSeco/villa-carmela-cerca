@@ -15,7 +15,7 @@ export const CategoryManager = () => {
             container.innerHTML = `
             <div class="max-w-4xl mx-auto animate-fade-in-up">
                 <div class="flex items-center mb-8">
-                    <a href="#admin/dashboard" class="text-stone-500 hover:text-stone-800 mr-4">
+                    <a href="/admin/dashboard" data-link class="text-stone-500 hover:text-stone-800 mr-4">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     </a>
                     <h2 class="text-3xl font-bold font-headings text-stone-900">Gestionar Categorías</h2>

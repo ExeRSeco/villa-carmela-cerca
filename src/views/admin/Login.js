@@ -25,7 +25,7 @@ export const Login = () => {
                 // Hash change handled by authService logic or manual here if needed, 
                 // but usually authService just does logic. 
                 // Let's redirect here to be explicit
-                window.location.hash = '#admin/dashboard';
+                window.navigateTo('/admin/dashboard');
             } catch (err) {
                 console.error(err);
                 errorMsg.textContent = 'Credenciales inválidas. Intente nuevamente.';
