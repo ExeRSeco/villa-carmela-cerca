@@ -13,8 +13,8 @@ export const Modal = (data) => {
 
     return `
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4" id="business-modal">
-        <div class="absolute inset-0 bg-stone-900/50 backdrop-blur-sm transition-opacity" id="modal-backdrop"></div>
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 animate-fade-in-up">
+        <div class="absolute inset-0 bg-stone-900/50 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 scale-95 opacity-0 transition-all duration-300">
             
             <!-- Close Button -->
             <button class="absolute top-4 right-4 z-20 bg-white/80 p-2 rounded-full hover:bg-white transition-colors shadow-sm" id="modal-close">
@@ -84,7 +84,7 @@ export const Modal = (data) => {
                             </div>
                         </div>
                         <div class="mt-4 flex flex-wrap gap-2">
-                            ${data.tags.map(tag => `<span class="text-xs bg-white border border-stone-200 px-2 py-1 rounded-md text-stone-500">${escapeHTML(tag)}</span>`).join('')}
+                            ${(data.tags && Array.isArray(data.tags)) ? data.tags.map(tag => `<span class="text-xs bg-white border border-stone-200 px-2 py-1 rounded-md text-stone-500">${escapeHTML(tag)}</span>`).join('') : ''}
                         </div>
                     </div>
                 </div>

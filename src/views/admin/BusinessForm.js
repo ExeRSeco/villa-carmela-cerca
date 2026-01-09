@@ -155,6 +155,11 @@ export const BusinessForm = (id = null) => {
                         </div>
 
                         <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Etiquetas / Palabras Clave (Separadas por coma)</label>
+                            <input type="text" name="tags" value="${escapeHTML(business.tags ? business.tags.join(', ') : '')}" placeholder="Ej: Gomeria, Parches, Villa Carmela" class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none">
+                        </div>
+
+                        <div>
                             <label class="block text-sm font-medium text-stone-700 mb-1">Aclaraciones (Opcional - Máx 150 caracteres)</label>
                             <textarea name="clarification" maxlength="150" rows="2" class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none resize-none" placeholder="Ej: Solo con reservas, No aceptamos mascotas...">${escapeHTML(business.clarification || '')}</textarea>
                         </div>
@@ -304,7 +309,7 @@ export const BusinessForm = (id = null) => {
                         expirationDate: formData.get('expirationDate'),
                         promotions: formData.get('promotions') || null,
                         clarification: formData.get('clarification') || null,
-                        tags: [], // Tags removed, sending empty array
+                        tags: formData.get('tags') ? formData.get('tags').split(',').map(t => t.trim()).filter(t => t) : [],
                         hours: hoursV2,
                         paymentMethods
                     };

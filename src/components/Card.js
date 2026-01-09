@@ -147,10 +147,20 @@ export const Card = (data) => {
                     <span class="mr-2 text-spa-400 mt-0.5 transition-transform">${LocationIcon()}</span>
                     <span class="tracking-tight">${safeAddress}</span>
                 </div>
-                 <div class="flex items-center text-sm text-stone-600 group/link hover:text-green-600 transition-colors z-10 relative w-fit" data-action="whatsapp" data-phone="${safeWhatsapp || safePhone}">
+                <div class="flex items-center text-sm text-stone-600 group/link hover:text-green-600 transition-colors z-10 relative w-fit" data-action="whatsapp" data-phone="${safeWhatsapp || safePhone}">
                     <span class="mr-2 text-spa-400 group-hover/link:text-green-500 group-hover/link:scale-110 transition-transform">${PhoneIcon()}</span>
                     <span class="group-hover/link:underline decoration-green-300 underline-offset-2 tracking-tight">WhatsApp / Contacto</span>
                 </div>
+
+                ${(data.tags && Array.isArray(data.tags) && data.tags.length > 0) ? `
+                <div class="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-dashed border-stone-100">
+                    ${data.tags.map(tag => `
+                        <span class="text-[10px] text-stone-500 bg-stone-50 px-2 py-0.5 rounded border border-stone-100">
+                            ${escapeHTML(tag)}
+                        </span>
+                    `).join('')}
+                </div>
+                ` : ''}
             </div>
 
              <div class="pt-4 border-t border-stone-100 mt-auto">
