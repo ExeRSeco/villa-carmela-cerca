@@ -181,45 +181,20 @@ export async function renderHome(container, targetSlug = null) {
         // Populate Categories
         // Categories not needed for input search
 
-        // Render Featured
-        const featuredBusinesses = businesses.filter(b => b.isFeatured)
-        featuredBusinesses.forEach(item => {
-            featuredGrid.insertAdjacentHTML('beforeend', Card(item))
-        })
+        // Helper to render Featured
+        function renderFeatured(data) {
+            featuredGrid.innerHTML = '';
+            const featuredData = data.filter(b => b.isFeatured);
 
-        // Main Grid Logic
-        let filteredData = [...businesses]
-        let displayedCount = 6
-        let isLoading = false
-
-        // Initial Render
-        renderCards(filteredData.slice(0, displayedCount))
-
-        // Event Listener: Category Filter
-        // Event Listener: Category Search
-        categorySearch.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim()
-
-            if (searchTerm) {
-                filteredData = businesses.filter(business =>
-                    business.category.toLowerCase().includes(searchTerm)
-                )
-            } else {
-                filteredData = [...businesses]
+            if (featuredData.length === 0) {
+                featuredGrid.innerHTML = '<div class="col-span-1 md:col-span-3 text-center text-stone-400 py-10">No se encontraron negocios destacados con esa búsqueda.</div>';
+                return;
             }
 
-            displayedCount = 6
-            grid.innerHTML = ''
-            renderCards(filteredData.slice(0, displayedCount))
-
-            if (filteredData.length > displayedCount) {
-                loadingSentinel.classList.remove('hidden')
-                observer.observe(loadingSentinel)
-            } else {
-                loadingSentinel.classList.add('hidden')
-                observer.unobserve(loadingSentinel)
-            }
-        })
+            featuredData.forEach(item => {
+                featuredGrid.insertAdjacentHTML('beforeend', Card(item))
+            });
+        }
 
         function renderCards(data) {
             data.forEach(item => {
@@ -236,6 +211,48 @@ export async function renderHome(container, targetSlug = null) {
                 }, 50)
             })
         }
+
+        // Initial Render
+        renderFeatured(businesses);
+        let filteredData = [...businesses];
+        let displayedCount = 6;
+        let isLoading = false;
+
+        renderCards(filteredData.slice(0, displayedCount));
+
+        // Event Listener: Search (Name, Category, Tags)
+        categorySearch.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim()
+
+            if (searchTerm) {
+                filteredData = businesses.filter(business => {
+                    const matchName = business.name.toLowerCase().includes(searchTerm);
+                    const matchCategory = business.category.toLowerCase().includes(searchTerm);
+                    // Tags might be null in old data, safe check handled
+                    const matchTags = business.tags && Array.isArray(business.tags) && business.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+
+                    return matchName || matchCategory || matchTags;
+                });
+            } else {
+                filteredData = [...businesses]
+            }
+
+            // Update Featured Grid
+            renderFeatured(filteredData);
+
+            // Update Main Grid
+            displayedCount = 6
+            grid.innerHTML = ''
+            renderCards(filteredData.slice(0, displayedCount))
+
+            if (filteredData.length > displayedCount) {
+                loadingSentinel.classList.remove('hidden')
+                observer.observe(loadingSentinel)
+            } else {
+                loadingSentinel.classList.add('hidden')
+                observer.unobserve(loadingSentinel)
+            }
+        });
 
         // Observer
         const observer = new IntersectionObserver((entries) => {
