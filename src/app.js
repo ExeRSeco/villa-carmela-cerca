@@ -1,6 +1,7 @@
 import { dataService } from './services/dataService.js'
 import { Card } from './components/Card.js'
 import { Modal } from './components/Modal.js'
+import { updateSchema, removeSchema } from './utils.js'
 
 export async function renderHome(container, targetSlug = null) {
     // Show Loading State
@@ -150,6 +151,9 @@ export async function renderHome(container, targetSlug = null) {
             // Close existing modal if any
             closeModal()
 
+            // Update SEO Schema
+            updateSchema(business);
+
             const modalHTML = Modal(business)
             document.body.insertAdjacentHTML('beforeend', modalHTML)
 
@@ -166,6 +170,7 @@ export async function renderHome(container, targetSlug = null) {
 
             const handleClose = () => {
                 modal.remove()
+                removeSchema()
             }
 
             backdrop.addEventListener('click', handleClose)
@@ -176,6 +181,7 @@ export async function renderHome(container, targetSlug = null) {
         function closeModal() {
             const existingModal = document.getElementById('business-modal')
             if (existingModal) existingModal.remove()
+            removeSchema()
         }
 
         // Populate Categories
@@ -228,10 +234,9 @@ export async function renderHome(container, targetSlug = null) {
                 filteredData = businesses.filter(business => {
                     const matchName = business.name.toLowerCase().includes(searchTerm);
                     const matchCategory = business.category.toLowerCase().includes(searchTerm);
-                    // Tags might be null in old data, safe check handled
-                    const matchTags = business.tags && Array.isArray(business.tags) && business.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                    const matchDescription = business.description && business.description.toLowerCase().includes(searchTerm);
 
-                    return matchName || matchCategory || matchTags;
+                    return matchName || matchCategory || matchDescription;
                 });
             } else {
                 filteredData = [...businesses]

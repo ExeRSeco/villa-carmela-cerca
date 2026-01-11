@@ -160,15 +160,12 @@ export const Card = (data) => {
                     <span class="group-hover/link:underline decoration-green-300 underline-offset-2 tracking-tight">WhatsApp / Contacto</span>
                 </div>
 
-                ${(data.tags && Array.isArray(data.tags) && data.tags.length > 0) ? `
-                <div class="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-dashed border-stone-100">
-                    ${data.tags.map(tag => `
-                        <span class="text-[10px] text-stone-500 bg-stone-50 px-2 py-0.5 rounded border border-stone-100">
-                            ${escapeHTML(tag)}
-                        </span>
-                    `).join('')}
+                <div class="mt-3 pt-2 border-t border-dashed border-stone-100">
+                    <p class="text-xs text-stone-500 line-clamp-2">
+                        ${escapeHTML(data.description || '')}
+                    </p>
                 </div>
-                ` : ''}
+
             </div>
 
              <div class="pt-4 border-t border-stone-100 mt-auto">

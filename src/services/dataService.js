@@ -17,7 +17,6 @@ const mapFromDb = (b) => ({
     startDate: b.start_date,
     expirationDate: b.expiration_date,
     hours: b.hours, // JSONB comes as object/array automatically
-    tags: b.tags,
     paymentMethods: b.payment_methods,
     promotions: b.promotions,
     clarification: b.clarification
@@ -39,7 +38,6 @@ const mapToDb = (b) => ({
     start_date: b.startDate || null,
     expiration_date: b.expirationDate || null,
     hours: b.hours,
-    tags: b.tags,
     payment_methods: b.paymentMethods,
     promotions: b.promotions,
     clarification: b.clarification

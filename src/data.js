@@ -14,7 +14,7 @@ export const businesses = [
         address: "Av. Libertador 1234, Palermo",
         delivery: true,
         image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Medicamentos", "Perfumería", "Dermocosmética"],
+        description: "Su farmacia de confianza con atención personalizada, amplia variedad de medicamentos, perfumería y dermocosmética.",
         paymentMethods: ["Efectivo", "Tarjeta", "Transferencia"],
         promotions: "20% OFF en dermocosmética los lunes"
     },
@@ -32,7 +32,7 @@ export const businesses = [
         address: "Gorriti 4500, Palermo Soho",
         delivery: true,
         image: "https://images.unsplash.com/photo-1574154746864-18c728795da1?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Bebidas", "Golosinas", "Carga Virtual"],
+        description: "Kiosco completo con bebidas frías, golosinas, carga virtual y todo lo que necesitás a toda hora.",
         paymentMethods: ["Efectivo", "Mercado Pago"],
         promotions: "2x1 en cervezas de 18 a 21hs"
     },
@@ -50,7 +50,7 @@ export const businesses = [
         address: "Santa Fe 3200, Recoleta",
         delivery: true,
         image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Novillo", "Cerdo", "Achuras"],
+        description: "Cortes de carne de primera calidad, achuras frescas, cerdo y atención de expertos carniceros.",
         paymentMethods: ["Efectivo", "Tarjeta", "Cuenta DNI"],
         promotions: "10% descuento pago contado"
     },
@@ -68,7 +68,7 @@ export const businesses = [
         address: "Malabia 1600, Palermo",
         delivery: true,
         image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Pan masa madre", "Facturas", "Sandwiches"],
+        description: "Panadería artesanal con masa madre, facturas recién horneadas y los sándwiches más ricos del barrio.",
         paymentMethods: ["Efectivo"],
         promotions: null
     },
@@ -86,7 +86,7 @@ export const businesses = [
         address: "Thames 2300, Palermo",
         delivery: true,
         image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Pizza a la piedra", "Empanadas", "Fainá"],
+        description: "Pizzas a la piedra crocantes y empanadas caseras con ingredientes frescos, listas para disfrutar en casa.",
         paymentMethods: ["Transferencia", "Efectivo"],
         promotions: "Envío gratis 3km redonda"
     },
@@ -105,7 +105,7 @@ export const businesses = [
         address: "Borges 1800, Palermo Soho",
         delivery: true,
         image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Hamburguesas", "Papas Fritas", "Bebidas"],
+        description: "Las mejores hamburguesas gourmet con medallones caseros, papas rústicas y bebidas heladas.",
         paymentMethods: ["Efectivo", "Tarjeta", "Mercado Pago"],
         promotions: "Combo pareja 15% OFF"
     },
@@ -123,7 +123,7 @@ export const businesses = [
         address: "Arenales 2800, Recoleta",
         delivery: true,
         image: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Frutas", "Verduras", "Orgánico"],
+        description: "Frutas y verduras frescas seleccionadas directamente del mercado, con opciones orgánicas y de estación.",
         paymentMethods: ["Efectivo", "Tarjeta"],
         promotions: "Bolson de fruta $5000"
     },
@@ -142,7 +142,7 @@ export const businesses = [
         address: "Fitz Roy 1900, Palermo Hollywood",
         delivery: true,
         image: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Despensa", "Lácteos", "Fiambres"],
+        description: "Todo lo que necesitás para tu despensa diaria: lácteos, fiambres, bebidas y productos de almacén.",
         paymentMethods: ["Efectivo", "Transferencia"],
         promotions: "Picada para 2 en oferta"
     },
@@ -160,7 +160,7 @@ export const businesses = [
         address: "Cabrera 3400, Palermo",
         delivery: true,
         image: "https://images.unsplash.com/photo-1585435557343-3b092031a831?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Medicamentos", "Vacunatorio", "Ortopedia"],
+        description: "Salud y bienestar con un amplio stock de medicamentos, vacunatorio y artículos de ortopedia.",
         paymentMethods: ["Efectivo", "Tarjeta", "Mercado Pago"],
         promotions: "2x1 en Ibuprofeno"
     },
@@ -178,7 +178,7 @@ export const businesses = [
         address: "Murillo 600, Villa Crespo",
         delivery: true,
         image: "https://images.unsplash.com/photo-1551028712-bc9973d81b8f?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Asado", "Embutidos", "Premium"],
+        description: "Carnes seleccionadas y embutidos caseros de elaboración propia, calidad premium para tus asados.",
         paymentMethods: ["Efectivo", "Tarjeta"],
         promotions: "Asado banderita oferta fin de semana"
     },
@@ -196,7 +196,7 @@ export const businesses = [
         address: "Bonpland 1500, Palermo",
         delivery: true,
         image: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Hortalizas", "Frutas Estación", "Huevos"],
+        description: "Productos naturales, hortalizas, orgánicos y frescos de estación para una alimentación saludable.",
         paymentMethods: ["Efectivo"],
         promotions: "Maple de huevos $2500"
     },
@@ -214,7 +214,7 @@ export const businesses = [
         address: "Av. Corrientes 4500, Almagro",
         delivery: false,
         image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1000&auto=format&fit=crop",
-        tags: ["Pan", "Masas finas", "Tortas"],
+        description: "Pan caliente todo el día, tortas, masas finas y especialidades dulces para acompañar tu mate.",
         paymentMethods: ["Efectivo", "Transferencia", "Tarjeta"],
         promotions: "Docena de facturas con descuento"
     }

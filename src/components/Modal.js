@@ -102,8 +102,10 @@ export const Modal = (data) => {
                         <div class="space-y-1">
                              ${hoursHtml}
                         </div>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            ${(data.tags && Array.isArray(data.tags)) ? data.tags.map(tag => `<span class="text-xs bg-white border border-stone-200 px-2 py-1 rounded-md text-stone-500">${escapeHTML(tag)}</span>`).join('') : ''}
+                        <div class="mt-4 pt-3 border-t border-stone-100">
+                            <p class="text-sm text-stone-600 leading-relaxed">
+                                ${escapeHTML(data.description || '')}
+                            </p>
                         </div>
                     </div>
                 </div>
