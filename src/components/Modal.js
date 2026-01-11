@@ -11,6 +11,30 @@ export const Modal = (data) => {
 
     const smartStatus = getSmartStatus(data.hours, data.isOpen);
 
+    let hoursHtml = '';
+    if (data.hours?.format === 'v3') {
+        const renderShift = (shifts) => shifts && shifts.length ? shifts.map(s => `${s.start} - ${s.end}`).join(' / ') : 'Cerrado';
+        hoursHtml = `
+        <div class="grid grid-cols-[min-content_1fr] gap-x-3 gap-y-1 text-sm text-stone-600 mt-1">
+            <span class="font-medium text-stone-700 whitespace-nowrap">Lun-Vie:</span>
+            <span>${renderShift(data.hours.weekdays?.shifts)}</span>
+            
+            <span class="font-medium text-stone-700 whitespace-nowrap">Sábado:</span>
+            <span>${renderShift(data.hours.saturday?.shifts)}</span>
+            
+            <span class="font-medium text-stone-700 whitespace-nowrap">Domingo:</span>
+            <span>${renderShift(data.hours.sunday?.shifts)}</span>
+        </div>`;
+    } else {
+        hoursHtml = `
+         <div class="text-sm text-stone-600 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-spa-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            ${data.hours && data.hours.display ? escapeHTML(data.hours.display) : 'Consultar'}
+        </div>`;
+    }
+
     return `
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4" id="business-modal">
         <div class="absolute inset-0 bg-stone-900/50 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
@@ -76,12 +100,7 @@ export const Modal = (data) => {
                     <div class="bg-stone-50 rounded-xl p-5 border border-stone-100">
                         <h4 class="font-bold text-stone-800 mb-3">Horarios</h4>
                         <div class="space-y-1">
-                             <div class="text-sm text-stone-600 flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-spa-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                ${data.hours && data.hours.display ? escapeHTML(data.hours.display) : 'Consultar'}
-                            </div>
+                             ${hoursHtml}
                         </div>
                         <div class="mt-4 flex flex-wrap gap-2">
                             ${(data.tags && Array.isArray(data.tags)) ? data.tags.map(tag => `<span class="text-xs bg-white border border-stone-200 px-2 py-1 rounded-md text-stone-500">${escapeHTML(tag)}</span>`).join('') : ''}

@@ -29,23 +29,31 @@ export function getSmartStatus(hoursData, isOpenOverride) {
         return { text: 'Abierto 24hs', class: 'text-green-600', isOpen: true };
     }
 
-    if (!hoursData.shifts) {
-        // Fallback or Legacy
-        return isOpenOverride
-            ? { text: 'Abierto', class: 'text-green-600', isOpen: true }
-            : { text: 'Cerrado', class: 'text-stone-500', isOpen: false };
+    const now = new Date();
+    const day = now.getDay(); // 0 = Sun, 6 = Sat
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    // Determine shifts based on day (v3) or fallback (v2)
+    let shifts = [];
+    if (hoursData.format === 'v3') {
+        if (day === 0) shifts = hoursData.sunday?.shifts || [];
+        else if (day === 6) shifts = hoursData.saturday?.shifts || [];
+        else shifts = hoursData.weekdays?.shifts || [];
+    } else {
+        shifts = hoursData.shifts || [];
     }
 
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    if (!shifts || shifts.length === 0) {
+        // No shifts for today
+        return { text: 'Cerrado', class: 'text-stone-500', isOpen: false };
+    }
 
     // Check if within any shift
     let isOpen = false;
-    let nextChange = null; // Minutes until next change
     let status = 'Cerrado';
     let cssClass = 'text-stone-500';
 
-    for (const shift of hoursData.shifts) {
+    for (const shift of shifts) {
         const [startH, startM] = shift.start.split(':').map(Number);
         const [endH, endM] = shift.end.split(':').map(Number);
 
@@ -67,7 +75,7 @@ export function getSmartStatus(hoursData, isOpenOverride) {
         } else if (currentMinutes < startMinutes) {
             // Check if opening soon (within 30 mins)
             const minutesUntilOpen = startMinutes - currentMinutes;
-            if (minutesUntilOpen <= 30 && status === 'Cerrado') { // Only set if not already matched another shift (impossible if sorted but good practice)
+            if (minutesUntilOpen <= 30 && status === 'Cerrado') {
                 status = 'Pronto a Abrir';
                 cssClass = 'text-yellow-600';
             }
@@ -89,7 +97,7 @@ export const Card = (data) => {
     let hoursDisplay = '';
     let smartStatus = { text: 'Cerrado', class: 'text-stone-500', isOpen: false };
 
-    if (data.hours && typeof data.hours === 'object' && data.hours.format === 'v2') {
+    if (data.hours && typeof data.hours === 'object' && (data.hours.format === 'v2' || data.hours.format === 'v3')) {
         hoursDisplay = escapeHTML(data.hours.display);
         smartStatus = getSmartStatus(data.hours, data.isOpen);
     } else {

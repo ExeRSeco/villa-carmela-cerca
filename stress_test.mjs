@@ -23,6 +23,28 @@ const scenarios = [
         }
     },
     {
+        name: "V3 Data (Split Shifts)",
+        data: {
+            id: 10,
+            name: "Business V3",
+            category: "Cat V3",
+            image: "img.jpg",
+            address: "Address V3",
+            phone: "333",
+            whatsapp: "333",
+            isFeatured: true,
+            isOpen: true,
+            hours: {
+                format: 'v3',
+                is24Hours: false,
+                weekdays: { shifts: [{ start: '08:00', end: '12:00' }] },
+                saturday: { shifts: [{ start: '09:00', end: '13:00' }] },
+                sunday: { shifts: [] }, // Closed
+                display: "L-V: 8-12 | Sab: 9-13"
+            }
+        }
+    },
+    {
         name: "Legacy Data (No Tags, No Payment, Old Hours)",
         data: {
             id: 2,
