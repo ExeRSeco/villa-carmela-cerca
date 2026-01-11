@@ -49,8 +49,8 @@ export async function renderHome(container, targetSlug = null) {
         </div>
 
         <div id="hero-section" class="mb-12 text-center">
-            <h1 class="text-3xl md:text-5xl font-headings font-bold text-stone-900 mb-4 tracking-tight">Comercios y servicios locales de Villa Carmela para encontrar rápido lo que buscás</h1>
-            <h2  class="text-lg text-stone-500 max-w-2xl mx-auto font-light leading-relaxed">Encuentra comercios y servicios en Villa Carmela con horarios, ubicación, WhatsApp y atención a domicilio.</h2>
+            <h1 class="text-3xl md:text-5xl font-headings font-bold text-stone-900 mb-4 tracking-tight">Comercios y servicios de Villa Carmela, para encontrar rápido lo que buscás</h1>
+            <h2  class="text-lg text-stone-500 max-w-2xl mx-auto font-light leading-relaxed">Todo lo que necesitás, rápido y en un solo lugar</h2>
         </div>
 
         <!-- Featured Section -->
