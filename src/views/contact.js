@@ -27,7 +27,7 @@ export const Contact = () => {
                         </li>
                         <li class="flex items-start">
                             <svg class="w-5 h-5 text-green-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            <span>Ubicación en Google Maps</span>
+                            <span>Presencia en Google</span>
                         </li>
                          <li class="flex items-start">
                             <svg class="w-5 h-5 text-green-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>

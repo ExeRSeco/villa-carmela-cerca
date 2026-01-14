@@ -1,4 +1,6 @@
 import './style.css'
+import { PrivacyPolicy } from './views/PrivacyPolicy.js'
+import { Terms } from './views/Terms.js'
 import { renderHome } from './app.js'
 import { About } from './views/about.js'
 import { Contact } from './views/contact.js'
@@ -41,22 +43,42 @@ document.querySelector('#app').innerHTML = `
 <footer class="bg-stone-900 text-stone-300 py-12 mt-auto">
     <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div>
+            <div class="flex flex-col h-full">
                  <h3 class="text-xl font-headings font-bold text-white mb-4">Villa Carmela Cerca</h3>
-                 <p class="text-sm font-light text-stone-400 leading-relaxed">Conectando a la comunidad con los mejores negocios locales. Calidad, confianza y cercanía.</p>
+                 <p class="text-sm font-light text-stone-400 leading-relaxed mb-8">Conectando a la comunidad con los mejores negocios locales. Calidad, confianza y cercanía.</p>
+                 <!-- Google AdSense Banner Placeholder -->
+                 <div class="w-full bg-stone-800 rounded-lg flex items-center justify-center border border-stone-700 p-4 min-h-[90px] relative overflow-hidden group mt-auto">
+                    <div class="absolute inset-0 bg-stone-700/50 flex flex-col items-center justify-center text-center p-4">
+                        <span class="text-stone-400 font-medium mb-2">Publicidad</span>
+                        <span class="text-xs text-stone-500">Espacio reservado para Google AdSense</span>
+                    </div>
+                     <!-- Paste Google AdSense script here -->
+                 </div>
             </div>
-            <div>
+            <div class="flex flex-col h-full">
                 <h4 class="text-lg font-bold text-white mb-4">Enlaces Rápidos</h4>
-                 <ul class="space-y-2 text-sm font-light">
+                 <ul class="space-y-2 text-sm font-light mb-8">
                     <li><button id="footer-contact-btn" class="hover:text-spa-400 transition-colors text-left">Registra tu negocio</button></li>
                     <li><button id="footer-about-btn" class="hover:text-spa-400 transition-colors text-left">Sobre Nosotros</button></li>
                     <li><button id="footer-contact-link-btn" class="hover:text-spa-400 transition-colors text-left">Contacto</button></li>
                 </ul>
+                <!-- Google AdSense Banner Placeholder -->
+                 <div class="w-full bg-stone-800 rounded-lg flex items-center justify-center border border-stone-700 p-4 min-h-[90px] relative overflow-hidden group mt-auto">
+                    <div class="absolute inset-0 bg-stone-700/50 flex flex-col items-center justify-center text-center p-4">
+                        <span class="text-stone-400 font-medium mb-2">Publicidad</span>
+                        <span class="text-xs text-stone-500">Espacio reservado para Google AdSense</span>
+                    </div>
+                     <!-- Paste Google AdSense script here -->
+                 </div>
             </div>
         </div>
         </div>
-        <div class="border-t border-stone-800 pt-8 text-center text-xs text-stone-500">
+        <div class="border-t border-stone-800 pt-8 text-center text-xs text-stone-500 flex flex-col md:flex-row justify-center items-center gap-4">
             <p>&copy; 2026 Villa Carmela Cerca. Todos los derechos reservados.</p>
+            <div class="flex gap-4">
+                <a href="/privacy-policy" id="footer-privacy" class="hover:text-spa-400 transition-colors">Política de Privacidad</a>
+                <a href="/terms-conditions" id="footer-terms" class="hover:text-spa-400 transition-colors">Términos y Condiciones</a>
+            </div>
         </div>
     </div>
 </footer>
@@ -131,6 +153,14 @@ async function router() {
         mainContent.innerHTML = contactHTML
         navContact.classList.add('text-spa-600', 'font-bold')
         document.title = 'Publicita - Villa Carmela Cerca'
+    } else if (path === '/privacy-policy') {
+        const privacyHTML = PrivacyPolicy();
+        mainContent.innerHTML = privacyHTML;
+        document.title = 'Política de Privacidad - Villa Carmela Cerca';
+    } else if (path === '/terms-conditions') {
+        const termsHTML = Terms();
+        mainContent.innerHTML = termsHTML;
+        document.title = 'Términos y Condiciones - Villa Carmela Cerca';
     } else if (path.startsWith('/business/')) {
         // Business Permalink
         const slug = path.split('/')[2];
@@ -163,6 +193,16 @@ logoBtn.addEventListener('click', () => { navigateTo('/'); })
 footerAboutBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/about'); })
 footerContactBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/contact'); })
 footerContactLinkBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/contact'); })
+
+const footerPrivacy = document.querySelector('#footer-privacy');
+const footerTerms = document.querySelector('#footer-terms');
+
+if (footerPrivacy) {
+    footerPrivacy.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/privacy-policy'); })
+}
+if (footerTerms) {
+    footerTerms.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/terms-conditions'); })
+}
 
 // Listen for custom navigation events
 document.addEventListener('navigate-to', (e) => {
