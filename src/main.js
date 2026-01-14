@@ -78,6 +78,7 @@ document.querySelector('#app').innerHTML = `
             <div class="flex gap-4">
                 <a href="/privacy-policy" id="footer-privacy" class="hover:text-spa-400 transition-colors">Política de Privacidad</a>
                 <a href="/terms-conditions" id="footer-terms" class="hover:text-spa-400 transition-colors">Términos y Condiciones</a>
+                <a href="/admin" data-link class="hover:text-spa-400 transition-colors">Business</a>
             </div>
         </div>
     </div>

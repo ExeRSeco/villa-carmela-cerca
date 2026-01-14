@@ -79,10 +79,7 @@ export async function renderHome(container, targetSlug = null) {
             <span class="text-xs text-stone-400 uppercase tracking-widest">Cargando más</span>
         </div>
 
-        <footer class="mt-20 border-t border-stone-100 py-10 text-center">
-           
-            <a href="/admin" data-link class="text-stone-300 hover:text-stone-500 text-xs transition-colors font-medium">Soy Dueño</a>
-        </footer>
+
         `;
 
         const grid = container.querySelector('#business-grid')
