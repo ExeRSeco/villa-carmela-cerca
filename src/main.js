@@ -47,7 +47,7 @@ document.querySelector('#app').innerHTML = `
                  <h3 class="text-xl font-headings font-bold text-white mb-4">Villa Carmela Cerca</h3>
                  <p class="text-sm font-light text-stone-400 leading-relaxed mb-8">Conectando a la comunidad con los mejores negocios locales. Calidad, confianza y cercanía.</p>
                  <!-- Google AdSense Banner Placeholder -->
-                 <div class="w-full bg-stone-800 rounded-lg flex items-center justify-center border border-stone-700 p-4 min-h-[90px] relative overflow-hidden group mt-auto">
+                 <div class="hidden w-full bg-stone-800 rounded-lg flex items-center justify-center border border-stone-700 p-4 min-h-[90px] relative overflow-hidden group mt-auto">
                     <div class="absolute inset-0 bg-stone-700/50 flex flex-col items-center justify-center text-center p-4">
                         <span class="text-stone-400 font-medium mb-2">Publicidad</span>
                         <span class="text-xs text-stone-500">Espacio reservado para Google AdSense</span>
@@ -63,7 +63,7 @@ document.querySelector('#app').innerHTML = `
                     <li><button id="footer-contact-link-btn" class="hover:text-spa-400 transition-colors text-left">Contacto</button></li>
                 </ul>
                 <!-- Google AdSense Banner Placeholder -->
-                 <div class="w-full bg-stone-800 rounded-lg flex items-center justify-center border border-stone-700 p-4 min-h-[90px] relative overflow-hidden group mt-auto">
+                 <div class="hidden w-full bg-stone-800 rounded-lg flex items-center justify-center border border-stone-700 p-4 min-h-[90px] relative overflow-hidden group mt-auto">
                     <div class="absolute inset-0 bg-stone-700/50 flex flex-col items-center justify-center text-center p-4">
                         <span class="text-stone-400 font-medium mb-2">Publicidad</span>
                         <span class="text-xs text-stone-500">Espacio reservado para Google AdSense</span>
