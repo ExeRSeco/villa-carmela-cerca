@@ -1,7 +1,8 @@
 import { dataService } from './services/dataService.js'
 import { Card } from './components/Card.js'
 import { Modal } from './components/Modal.js'
-import { updateSchema, removeSchema } from './utils.js'
+import { updateSchema, removeSchema, debounce } from './utils.js'
+import Fuse from 'fuse.js'
 
 export async function renderHome(container, targetSlug = null) {
     // Show Loading State
@@ -224,17 +225,20 @@ export async function renderHome(container, targetSlug = null) {
         renderCards(filteredData.slice(0, displayedCount));
 
         // Event Listener: Search (Name, Category, Tags)
-        categorySearch.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim()
+        // Initialize Fuse.js
+        const fuse = new Fuse(businesses, {
+            keys: ['name', 'category', 'description', 'tags'],
+            threshold: 0.3,
+            ignoreLocation: true
+        });
+
+        // Event Listener: Search (Name, Category, Tags)
+        const performSearch = debounce((e) => {
+            const searchTerm = e.target.value.trim()
 
             if (searchTerm) {
-                filteredData = businesses.filter(business => {
-                    const matchName = business.name.toLowerCase().includes(searchTerm);
-                    const matchCategory = business.category.toLowerCase().includes(searchTerm);
-                    const matchDescription = business.description && business.description.toLowerCase().includes(searchTerm);
-
-                    return matchName || matchCategory || matchDescription;
-                });
+                const results = fuse.search(searchTerm);
+                filteredData = results.map(result => result.item);
             } else {
                 filteredData = [...businesses]
             }
@@ -245,16 +249,48 @@ export async function renderHome(container, targetSlug = null) {
             // Update Main Grid
             displayedCount = 6
             grid.innerHTML = ''
-            renderCards(filteredData.slice(0, displayedCount))
 
-            if (filteredData.length > displayedCount) {
-                loadingSentinel.classList.remove('hidden')
-                observer.observe(loadingSentinel)
-            } else {
+            if (filteredData.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-1 md:col-span-3 text-center py-16">
+                        <div class="bg-stone-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-stone-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-medium text-stone-900 mb-1">No encontramos resultados</h3>
+                        <p class="text-stone-500 max-w-xs mx-auto mb-6">Intentá con otra palabra clave o navegá por las categorías.</p>
+                        <button id="clear-search-btn" class="text-spa-600 font-medium hover:text-spa-700 hover:underline">
+                            Ver todos los comercios
+                        </button>
+                    </div>
+                `;
+
+                // Add listener to clear search
+                const clearBtn = document.getElementById('clear-search-btn');
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', () => {
+                        categorySearch.value = '';
+                        categorySearch.dispatchEvent(new Event('input'));
+                    });
+                }
+
                 loadingSentinel.classList.add('hidden')
                 observer.unobserve(loadingSentinel)
+            } else {
+                renderCards(filteredData.slice(0, displayedCount))
+
+                if (filteredData.length > displayedCount) {
+                    loadingSentinel.classList.remove('hidden')
+                    observer.observe(loadingSentinel)
+                } else {
+                    loadingSentinel.classList.add('hidden')
+                    observer.unobserve(loadingSentinel)
+                }
             }
-        });
+        }, 300);
+
+        categorySearch.addEventListener('input', performSearch);
 
         // Observer
         const observer = new IntersectionObserver((entries) => {
