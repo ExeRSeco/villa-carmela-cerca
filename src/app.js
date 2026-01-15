@@ -1,6 +1,6 @@
 import { dataService } from './services/dataService.js'
 import { Card } from './components/Card.js'
-import { Modal } from './components/Modal.js'
+
 import { updateSchema, removeSchema, debounce } from './utils.js'
 import Fuse from 'fuse.js'
 
@@ -136,7 +136,8 @@ export async function renderHome(container, targetSlug = null) {
                 const businessId = parseInt(card.dataset.businessId)
                 const business = businesses.find(b => b.id === businessId)
                 if (business) {
-                    openModal(business)
+                    // Navigate to business page, ONLY using slug
+                    navigateTo(`/business/${business.slug}`);
                 }
             }
         }
@@ -144,43 +145,7 @@ export async function renderHome(container, targetSlug = null) {
         featuredGrid.addEventListener('click', handleCardInteractions)
         grid.addEventListener('click', handleCardInteractions)
 
-        // Modal Logic
-        function openModal(business) {
-            // Close existing modal if any
-            closeModal()
 
-            // Update SEO Schema
-            updateSchema(business);
-
-            const modalHTML = Modal(business)
-            document.body.insertAdjacentHTML('beforeend', modalHTML)
-
-            const modal = document.getElementById('business-modal')
-            const backdrop = document.getElementById('modal-backdrop')
-            const closeBtn = document.getElementById('modal-close')
-            const closeBtnInternal = document.getElementById('modal-close-btn')
-
-            // Animate in
-            requestAnimationFrame(() => {
-                modal.querySelector('#modal-backdrop').classList.remove('opacity-0')
-                modal.querySelector('div[class*="scale-95"]').classList.remove('scale-95', 'opacity-0')
-            })
-
-            const handleClose = () => {
-                modal.remove()
-                removeSchema()
-            }
-
-            backdrop.addEventListener('click', handleClose)
-            closeBtn.addEventListener('click', handleClose)
-            closeBtnInternal.addEventListener('click', handleClose)
-        }
-
-        function closeModal() {
-            const existingModal = document.getElementById('business-modal')
-            if (existingModal) existingModal.remove()
-            removeSchema()
-        }
 
         // Populate Categories
         // Categories not needed for input search
@@ -318,15 +283,7 @@ export async function renderHome(container, targetSlug = null) {
             observer.observe(loadingSentinel)
         }
 
-        // Open Permalink Modal
-        if (targetSlug) {
-            const targetBusiness = businesses.find(b => b.slug === targetSlug)
-            if (targetBusiness) {
-                openModal(targetBusiness)
-                // Update title for SEO/Sharing
-                document.title = `${targetBusiness.name} - Villa Carmela Cerca`
-            }
-        }
+
     } catch (error) {
         console.error("Failed to load data", error);
         container.innerHTML = `<div class="text-center p-10 text-red-500">Error cargando datos. Por favor intenta más tarde.</div>`;

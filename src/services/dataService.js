@@ -19,7 +19,9 @@ const mapFromDb = (b) => ({
     hours: b.hours, // JSONB comes as object/array automatically
     paymentMethods: b.payment_methods,
     promotions: b.promotions,
-    clarification: b.clarification
+    clarification: b.clarification,
+    // Force generation from name to avoid legacy IDs in DB slugs
+    slug: b.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().replace(/[\s\W-]+/g, '-')
 });
 
 // Helper to Map App to DB

@@ -26,8 +26,8 @@ export const updateSchema = (business) => {
         "name": business.name,
         "image": imageUrl ? [imageUrl] : [],
         "description": business.description || `Comercio en Villa Carmela: ${business.name}`,
-        "@id": `${siteUrl}/business/${business.slug || business.id}`,
-        "url": `${siteUrl}/business/${business.slug || business.id}`,
+        "@id": `${siteUrl}/business/${business.slug}`,
+        "url": `${siteUrl}/business/${business.slug}`,
         "telephone": business.whatsapp ? `+549${business.whatsapp.replace(/\D/g, '')}` : undefined,
         "address": {
             "@type": "PostalAddress",

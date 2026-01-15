@@ -8,7 +8,10 @@ import { Login } from './views/admin/Login.js'
 import { Dashboard } from './views/admin/Dashboard.js'
 import { BusinessForm } from './views/admin/BusinessForm.js'
 import { CategoryManager } from './views/admin/CategoryManager.js'
+import { BusinessDetail } from './views/BusinessDetail.js'
+import { dataService } from './services/dataService.js'
 import { authService } from './services/authService.js'
+import { updateSchema } from './utils.js'
 import { injectSpeedInsights } from '@vercel/speed-insights';
 
 injectSpeedInsights();
@@ -165,9 +168,33 @@ async function router() {
     } else if (path.startsWith('/business/')) {
         // Business Permalink
         const slug = path.split('/')[2];
-        mainContent.innerHTML = '';
-        renderHome(mainContent, slug)
-        navHome.classList.add('text-spa-600', 'font-bold')
+
+        mainContent.innerHTML = `
+            <div class="flex items-center justify-center min-h-screen">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-spa-600"></div>
+            </div>
+        `;
+
+        try {
+            const businesses = await dataService.getAll();
+            const business = businesses.find(b => b.slug === slug || b.id.toString() === slug);
+
+            if (business) {
+                mainContent.innerHTML = BusinessDetail(business);
+                navHome.classList.remove('text-spa-600', 'font-bold'); // Fix: remove active state from home
+                document.title = `${business.name} - Villa Carmela Cerca`;
+                updateSchema(business);
+
+                // We need to scroll to top
+                window.scrollTo(0, 0);
+            } else {
+                console.warn('Business not found for slug:', slug);
+                navigateTo('/');
+            }
+        } catch (error) {
+            console.error('Error loading business:', error);
+            navigateTo('/');
+        }
     } else {
         // Default Home
         mainContent.innerHTML = '';
