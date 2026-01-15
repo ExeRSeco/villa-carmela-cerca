@@ -20,8 +20,8 @@ const mapFromDb = (b) => ({
     paymentMethods: b.payment_methods,
     promotions: b.promotions,
     clarification: b.clarification,
-    // Force generation from name to avoid legacy IDs in DB slugs
-    slug: b.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().replace(/[\s\W-]+/g, '-')
+    // Use DB slug
+    slug: b.slug
 });
 
 // Helper to Map App to DB
@@ -42,7 +42,8 @@ const mapToDb = (b) => ({
     hours: b.hours,
     payment_methods: b.paymentMethods,
     promotions: b.promotions,
-    clarification: b.clarification
+    clarification: b.clarification,
+    slug: b.slug
 });
 
 export const dataService = {
@@ -64,6 +65,17 @@ export const dataService = {
             .from('businesses')
             .select('*')
             .eq('id', id)
+            .single();
+
+        if (error) return null;
+        return mapFromDb(data);
+    },
+
+    async getBySlug(slug) {
+        const { data, error } = await supabase
+            .from('businesses')
+            .select('*')
+            .eq('slug', slug)
             .single();
 
         if (error) return null;

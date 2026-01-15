@@ -176,8 +176,7 @@ async function router() {
         `;
 
         try {
-            const businesses = await dataService.getAll();
-            const business = businesses.find(b => b.slug === slug || b.id.toString() === slug);
+            const business = await dataService.getBySlug(slug);
 
             if (business) {
                 mainContent.innerHTML = BusinessDetail(business);
