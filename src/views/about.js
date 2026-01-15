@@ -15,12 +15,21 @@ export const About = () => {
                     <div class="absolute inset-0 bg-spa-900/10 mix-blend-multiply"></div>
                 </div>
                 <div class="p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
-                    <h3 class="text-2xl font-headings font-bold text-spa-800 mb-4">Nuestra Misión</h3>
-                    <p class="text-stone-600 leading-relaxed mb-6 font-light">
-                        Villa Carmela Cerca nace para conectar a los vecinos con los comercios, emprendedores y servicios locales de la zona.
-                        Creemos en el valor de comprar y contratar cerca: almacenes, ferreterías, electricistas, plomeros, profesionales y emprendedores que hacen crecer nuestra comunidad día a día.
-                        Nuestro objetivo es que encuentres información clara, actualizada y confiable, todo en un solo lugar y sin intermediarios.
-                    </p>
+                    <h3 class="text-2xl font-headings font-bold text-spa-800 mb-4">Nuestra Misión – Villa Carmela Cerca</h3>
+                    <div class="text-stone-600 leading-relaxed font-light space-y-4">
+                        <p>
+                            Villa Carmela Cerca es una plataforma creada para conectar a los vecinos de Villa Carmela con los comercios, emprendedores y servicios locales de la zona. Nacimos con una idea simple: que encontrar lo que necesitás cerca de tu casa sea fácil, rápido y confiable.
+                        </p>
+                        <p>
+                            Creemos en el valor de comprar y contratar en el barrio, apoyando a almacenes, ferreterías, carnicerías, profesionales, electricistas, plomeros, emprendedores y pequeños negocios locales que hacen crecer Villa Carmela todos los días.
+                        </p>
+                        <p>
+                            Nuestro objetivo es ofrecer un directorio local actualizado, con información clara y real: ubicación, horarios, contacto directo por WhatsApp y servicios disponibles, todo en un solo lugar y sin intermediarios.
+                        </p>
+                        <p>
+                            En Villa Carmela Cerca trabajamos para fortalecer el comercio local, ayudar a los vecinos a encontrar lo que buscan y generar una comunidad más conectada, donde lo cercano importa.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
