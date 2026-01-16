@@ -15,6 +15,8 @@ export const Dashboard = () => {
 
         try {
             const businesses = await dataService.getAll();
+            const totalBusinesses = businesses.length;
+            const featuredBusinesses = businesses.filter(b => b.isFeatured).length;
 
             // ... (render header) ...
             container.innerHTML = `
@@ -37,14 +39,43 @@ export const Dashboard = () => {
                     </div>
                 </div>
                 
-                <!-- Search Bar -->
-                <div class="mb-6 relative">
-                    <input type="text" id="admin-search" placeholder="Buscar por nombre o categoría..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none transition-shadow">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+                <!-- Stats Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-stone-500 text-sm font-medium">Total Locales</p>
+                            <p class="text-2xl font-bold text-stone-800">${totalBusinesses}</p>
+                        </div>
+                        <div class="bg-stone-100 p-2 rounded-lg text-stone-600">
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                        </div>
                     </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-stone-500 text-sm font-medium">Locales Destacados</p>
+                            <p class="text-2xl font-bold text-stone-800">${featuredBusinesses}</p>
+                        </div>
+                        <div class="bg-yellow-100 p-2 rounded-lg text-yellow-600">
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <!-- Search Bar & Sort -->
+                <div class="mb-6 flex flex-col md:flex-row gap-4">
+                    <div class="relative flex-1">
+                        <input type="text" id="admin-search" placeholder="Buscar por nombre o categoría..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none transition-shadow">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <select id="sort-order" class="bg-white border border-stone-200 rounded-lg px-4 py-2 text-stone-600 focus:outline-none focus:ring-2 focus:ring-spa-400">
+                        <option value="featured">Destacados (Predeterminado)</option>
+                        <option value="id_asc">ID: Menor a Mayor</option>
+                    </select>
                 </div>
 
                 <!-- Desktop Table View -->
@@ -177,8 +208,9 @@ export const Dashboard = () => {
             </div>
             `;
 
-            // Search Logic
+            // Search & Sort Logic
             const searchInput = container.querySelector('#admin-search');
+            const sortSelect = container.querySelector('#sort-order');
             const tableBox = container.querySelector('.hidden.md\\:block'); // Desktop container
             const tableBody = container.querySelector('tbody');
             const mobileContainer = container.querySelector('.md\\:hidden'); // Mobile container
@@ -301,22 +333,43 @@ export const Dashboard = () => {
                 }).join('');
             };
 
-            const filterData = (term) => {
-                const lowerTerm = term.toLowerCase();
-                const filtered = businesses.filter(b =>
-                    b.name.toLowerCase().includes(lowerTerm) ||
-                    b.category.toLowerCase().includes(lowerTerm)
+            const filterAndSortData = () => {
+                const term = searchInput.value.trim().toLowerCase();
+                const sortMode = sortSelect.value;
+
+                let filtered = businesses.filter(b =>
+                    b.name.toLowerCase().includes(term) ||
+                    b.category.toLowerCase().includes(term)
                 );
+
+                // Sorting
+                if (sortMode === 'id_asc') {
+                    filtered.sort((a, b) => a.id - b.id);
+                } else {
+                    // Default: 'featured' descending (already sorted by DB, but good to ensure if filtering messes up order?)
+                    // Actually DB uses order('is_featured', { ascending: false }).
+                    // Javascript sort is stable, but let's be explicit if we want strict Featured first then ID or Name.
+                    // For now, let's just re-sort by featured to be safe if we change modes back and forth.
+                    filtered.sort((a, b) => {
+                        if (a.isFeatured === b.isFeatured) return 0;
+                        return a.isFeatured ? -1 : 1;
+                    });
+                }
+
                 renderTableRows(filtered);
                 renderMobileCards(filtered);
-                attachDeleteListeners(); // Re-attach listeners after re-render
+                attachDeleteListeners();
             };
 
             // Debounce simple
             let timeout;
             searchInput.addEventListener('input', (e) => {
                 clearTimeout(timeout);
-                timeout = setTimeout(() => filterData(e.target.value.trim()), 300);
+                timeout = setTimeout(filterAndSortData, 300);
+            });
+
+            sortSelect.addEventListener('change', () => {
+                filterAndSortData();
             });
 
             function attachDeleteListeners() {
