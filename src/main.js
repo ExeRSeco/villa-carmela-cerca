@@ -242,6 +242,7 @@ async function router() {
                 if (card) {
                     const slug = card.dataset.businessSlug;
                     if (slug) {
+                        sessionStorage.setItem('return_path', window.location.pathname);
                         navigateTo(`/business/${slug}`);
                     }
                 }

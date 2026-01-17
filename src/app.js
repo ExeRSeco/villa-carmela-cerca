@@ -182,6 +182,9 @@ export async function renderHome(container, targetSlug = null) {
                         timestamp: Date.now()
                     }));
 
+                    // Set return path for Back button logic
+                    sessionStorage.setItem('return_path', '/');
+
                     // Navigate to business page, ONLY using slug
                     navigateTo(`/business/${business.slug}`);
                 }

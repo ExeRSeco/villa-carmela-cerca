@@ -63,14 +63,19 @@ export const BusinessDetail = (data) => {
         </div>`;
     }
 
+    // Contextual Back Link
+    const returnPath = sessionStorage.getItem('return_path') || '/';
+    const isCategoryReturn = returnPath.includes('/category/');
+    const backText = isCategoryReturn ? 'Volver al rubro' : 'Volver al inicio';
+
     return `
     <div class="animate-fade-in-up max-w-6xl mx-auto">
         <!-- Back Button -->
-        <a href="/" data-link class="inline-flex items-center gap-2 text-stone-500 hover:text-spa-600 font-medium mb-6 transition-colors">
+        <a href="${returnPath}" data-link class="inline-flex items-center gap-2 text-stone-500 hover:text-spa-600 font-medium mb-6 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Volver al inicio
+            ${backText}
         </a>
 
         <div class="bg-white rounded-3xl shadow-sm border border-stone-100 overflow-hidden">
