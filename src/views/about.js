@@ -67,7 +67,7 @@ export const About = () => {
         <div class="bg-spa-500 rounded-2xl p-8 md:p-12 text-center text-white shadow-lg mb-12">
             <h3 class="text-2xl md:text-3xl font-headings font-bold mb-4">¿Tenés un comercio o brindás servicios en Villa Carmela?</h3>
             <p class="text-spa-100 mb-8 max-w-2xl mx-auto">Sumate a la guía más completa de la zona y conectá con más vecinos.</p>
-            <a href="#contact" class="inline-block bg-white text-spa-600 px-8 py-3 rounded-full font-bold shadow-md hover:bg-stone-50 hover:scale-105 transition-all duration-300">
+            <a href="/contact" data-link class="inline-block bg-white text-spa-600 px-8 py-3 rounded-full font-bold shadow-md hover:bg-stone-50 hover:scale-105 transition-all duration-300">
                 Publicita hoy
             </a>
         </div>
