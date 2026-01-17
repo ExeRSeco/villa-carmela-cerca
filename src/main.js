@@ -96,11 +96,19 @@ const logoBtn = document.querySelector('#logo-btn')
 const footerAboutBtn = document.querySelector('#footer-about-btn')
 const footerContactBtn = document.querySelector('#footer-contact-btn')
 const footerContactLinkBtn = document.querySelector('#footer-contact-link-btn')
+const mainFooter = document.querySelector('footer')
 
 
 // Routing Logic
 async function router() {
     const path = window.location.pathname;
+
+    // AdSense Compliance: Hide Footer (Ads) on Admin Pages
+    if (path.startsWith('/admin')) {
+        mainFooter.classList.add('hidden');
+    } else {
+        mainFooter.classList.remove('hidden');
+    }
 
     // Reset active states
     navHome.classList.remove('text-spa-600', 'font-bold')
