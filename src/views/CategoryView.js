@@ -69,7 +69,7 @@ export const CategoryView = async (categorySlug) => {
                 <div>
                      <span class="text-sm font-bold text-spa-600 uppercase tracking-widest">Categoría</span>
                      <h1 class="text-3xl font-headings font-bold text-stone-900 mb-2">${escapeHTML(categoryName)}</h1>
-                     <p class="text-stone-500 max-w-2xl">Explorá todas las opciones de <span class="font-bold text-stone-700">${escapeHTML(categoryName)}</span> en Villa Carmela. Información actualizada, horarios y comercios destacados.</p>
+                     <p class="text-stone-500 max-w-2xl">Explorá todas las opciones de <span class="font-bold text-stone-700">${escapeHTML(categoryName)}</span>. Información actualizada, horarios y comercios destacados.</p>
                 </div>
              </div>
 
