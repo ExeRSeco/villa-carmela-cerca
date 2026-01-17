@@ -235,8 +235,8 @@ export const BusinessForm = (id = null) => {
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-stone-700 mb-1">Breve Descripción (Aparece en la tarjeta - Máx 160 caracteres)</label>
-                            <textarea name="description" maxlength="160" rows="2" class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none resize-none" placeholder="Ej: Venta de accesorios, ropa y complementos...">${escapeHTML(business.description || '')}</textarea>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Breve Descripción (Aparece en la tarjeta - Máx 200 caracteres)</label>
+                            <textarea name="description" maxlength="200" rows="2" class="w-full px-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-spa-400 focus:outline-none resize-none" placeholder="Ej: Venta de accesorios, ropa y complementos...">${escapeHTML(business.description || '')}</textarea>
                         </div>
 
                         <div>
