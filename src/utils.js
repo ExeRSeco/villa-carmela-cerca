@@ -114,6 +114,52 @@ export const generateSlug = (text) => {
         .replace(/[\u0300-\u036f]/g, "") // Remove accents
         .trim()
         .replace(/\s+/g, '-')     // Replace spaces with -
-        .replace(/[^\w\-]+/g, '') // Remove all non-word chars
         .replace(/\-\-+/g, '-');  // Replace multiple - with single -
+};
+
+export const formatDaysRange = (days) => {
+    if (!days || days.length === 0) return '';
+
+    // Sort days: Mon(1) -> Sun(0). We need 0 to be last for "Lun-Dom" logic usually,
+    // but JS getDay() is 0=Sun. Let's map 0->7 for sorting to get Mon(1)..Sat(6),Sun(7)
+    const sortedDays = [...days].map(d => d === 0 ? 7 : d).sort((a, b) => a - b);
+
+    // Map back 7->0 for output if needed, but for range check 1-7 is easier.
+    const dayNames = {
+        1: 'Lun', 2: 'Mar', 3: 'Mié', 4: 'Jue', 5: 'Vie', 6: 'Sáb', 7: 'Dom'
+    };
+
+    let ranges = [];
+    let start = sortedDays[0];
+    let prev = sortedDays[0];
+
+    for (let i = 1; i < sortedDays.length; i++) {
+        const current = sortedDays[i];
+        if (current === prev + 1) {
+            // Consecutive
+            prev = current;
+        } else {
+            // Break
+            if (start === prev) {
+                ranges.push(dayNames[start]);
+            } else if (prev === start + 1) {
+                ranges.push(`${dayNames[start]}, ${dayNames[prev]}`);
+            } else {
+                ranges.push(`${dayNames[start]} a ${dayNames[prev]}`);
+            }
+            start = current;
+            prev = current;
+        }
+    }
+
+    // Push last range
+    if (start === prev) {
+        ranges.push(dayNames[start]);
+    } else if (prev === start + 1) {
+        ranges.push(`${dayNames[start]}, ${dayNames[prev]}`);
+    } else {
+        ranges.push(`${dayNames[start]} a ${dayNames[prev]}`);
+    }
+
+    return ranges.join(', ');
 };

@@ -9,6 +9,7 @@ import { Dashboard } from './views/admin/Dashboard.js'
 import { BusinessForm } from './views/admin/BusinessForm.js'
 import { CategoryManager } from './views/admin/CategoryManager.js'
 import { BusinessDetail } from './views/BusinessDetail.js'
+import { CategoryView } from './views/CategoryView.js'
 import { dataService } from './services/dataService.js'
 import { authService } from './services/authService.js'
 import { updateSchema } from './utils.js'
@@ -202,6 +203,28 @@ async function router() {
             console.error('Error loading business:', error);
             navigateTo('/');
         }
+    } else if (path.startsWith('/category/')) {
+        // Category Page
+        const slug = path.split('/')[2];
+        mainContent.innerHTML = `
+            <div class="flex items-center justify-center min-h-screen">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-spa-600"></div>
+            </div>
+        `;
+        const categoryHTML = await CategoryView(slug);
+        mainContent.innerHTML = categoryHTML;
+        navHome.classList.remove('text-spa-600', 'font-bold');
+        document.title = `${slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} - Villa Carmela Cerca`;
+
+        // SEO: Meta Description
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            const formattedName = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            metaDesc.setAttribute('content', `Encontrá ${formattedName} en Villa Carmela. Horarios, direcciones, teléfonos y más en la guía comercial más completa de la zona.`);
+        }
+
+        window.scrollTo(0, 0);
+
     } else {
         // Default Home
         mainContent.innerHTML = '';
@@ -221,10 +244,10 @@ window.navigateTo = (url) => {
 // We will intercept clicks globally now, but keep ID references for specific Logic if needed or remove them.
 // Let's attach specific listeners to our nav elements to be safe and explicit, calling navigateTo
 
-navHome.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/'); })
+navHome.addEventListener('click', (e) => { e.preventDefault(); sessionStorage.removeItem('home_persistence'); navigateTo('/'); })
 navAbout.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/about'); })
 navContact.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/contact'); })
-logoBtn.addEventListener('click', () => { navigateTo('/'); })
+logoBtn.addEventListener('click', () => { sessionStorage.removeItem('home_persistence'); navigateTo('/'); })
 footerAboutBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/about'); })
 footerContactBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/contact'); })
 footerContactLinkBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo('/contact'); })

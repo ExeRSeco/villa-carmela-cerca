@@ -25,7 +25,7 @@ export async function renderHome(container, targetSlug = null) {
             <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="text-center md:text-left">
                     <h3 class="text-2xl font-headings font-bold mb-2">¿Tenés un comercio o brindás servicios?</h3>
-                    <p class="text-spa-100 font-light">Publicita con nosotros desde <span class="font-bold text-white">$5.000/mes</span></p>
+                    <p class="text-spa-100 font-light">Publicita con nosotros. <span class="font-bold text-white text-lg">¡Tu primer mes es GRATIS!</span></p>
                 </div>
                 <button id="banner-contact-btn" class="bg-white text-spa-900 px-6 py-3 rounded-full font-bold shadow-md hover:bg-stone-50 hover:scale-105 transition-all duration-300">
                     Contactar Ahora
@@ -39,13 +39,48 @@ export async function renderHome(container, targetSlug = null) {
         <!-- Search Bar Section -->
         <div class="bg-white border-b border-stone-100 py-6 mb-10 rounded-2xl shadow-sm" id="search-container">
             <div class="px-4">
-                 <div class="relative max-w-lg mx-auto">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+                 <div class="max-w-xl mx-auto flex gap-2">
+                    <div class="relative flex-grow">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input type="text" id="category-search" placeholder="Buscar: gomería, gas envasado, peluquería…" class="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 bg-stone-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-spa-200 focus:border-spa-400 transition-all shadow-sm text-stone-700 placeholder-stone-400">
                     </div>
-                    <input type="text" id="category-search" placeholder="Buscar: gomería, gas envasado, peluquería…" class="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 bg-stone-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-spa-200 focus:border-spa-400 transition-all shadow-sm text-stone-700 placeholder-stone-400">
+                    <button id="search-btn" class="bg-spa-600 hover:bg-spa-700 text-white font-bold py-3 px-6 rounded-xl shadow-sm transition-colors duration-200 flex-shrink-0">
+                        Buscar
+                    </button>
+                </div>
+                
+                <!-- Quick Categories Toggle -->
+                <div class="max-w-4xl mx-auto mt-6 text-center">
+                    <button id="toggle-categories-btn" class="inline-flex items-center gap-2 text-sm font-bold text-spa-600 hover:text-spa-700 uppercase tracking-wider transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
+                        Filtrar por Categoría
+                        <svg id="cat-arrow" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-300 transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div id="categories-container" class="hidden mt-6 animate-fade-in-down origin-top">
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 p-1">
+                            ${categories.sort().map(cat => {
+            // Simple slugify for link
+            const slug = cat.toLowerCase().replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n').replace(/[^a-z0-9]/g, '-');
+            return `
+                                <a href="/category/${slug}" data-link class="group flex items-center justify-between px-4 py-3 bg-white text-stone-600 rounded-xl text-sm font-medium hover:text-spa-600 hover:border-spa-300 border border-stone-100 shadow-sm hover:shadow-md transition-all duration-200">
+                                    <span>${cat}</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-stone-300 group-hover:text-spa-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                                `;
+        }).join('')}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -136,6 +171,17 @@ export async function renderHome(container, targetSlug = null) {
                 const businessId = parseInt(card.dataset.businessId)
                 const business = businesses.find(b => b.id === businessId)
                 if (business) {
+                    // Save State Logic for Persistence
+                    const currentScroll = window.scrollY;
+                    const SearchInput = document.querySelector('#category-search');
+                    const searchTerm = SearchInput ? SearchInput.value : '';
+
+                    sessionStorage.setItem('home_persistence', JSON.stringify({
+                        scroll: currentScroll,
+                        search: searchTerm,
+                        timestamp: Date.now()
+                    }));
+
                     // Navigate to business page, ONLY using slug
                     navigateTo(`/business/${business.slug}`);
                 }
@@ -257,6 +303,62 @@ export async function renderHome(container, targetSlug = null) {
 
         categorySearch.addEventListener('input', performSearch);
 
+        // Search Button and Enter Key Logic (Auto-Scroll)
+        const searchBtn = container.querySelector('#search-btn');
+
+        const scrollToResults = () => {
+            // Determine where to scroll: Featured or Main Grid?
+            // Usually if filtering, main grid is what matters. 
+            // Let's scroll to the start of the results area (Featured Header or Main Grid)
+            // Ideally "Featured" if it has items, otherwise "All businesses".
+            // Since we update both, let's scroll to the container wrapper of features to be safe.
+            // Or simpler: The "Featured" section header.
+
+            const resultsStart = container.querySelector('#featured-grid').previousElementSibling; // The h2 header wrapper
+            if (resultsStart) {
+                resultsStart.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+
+        if (searchBtn) {
+            searchBtn.addEventListener('click', () => {
+                // Ensure search is triggered (it is debounce on input, but click is explicit)
+                // performSearch is debounced, so calling it here might be delayed. 
+                // But the input event already fired if typed. 
+                // If they typed and immediately clicked, debounce might still be pending.
+                // We can force a search or just trust the debounce. 
+                // Let's just scroll.
+                scrollToResults();
+            });
+        }
+
+        // Toggle Categories Logic
+        const toggleCatBtn = container.querySelector('#toggle-categories-btn');
+        const catContainer = container.querySelector('#categories-container');
+        const catArrow = container.querySelector('#cat-arrow');
+
+        if (toggleCatBtn && catContainer) {
+            toggleCatBtn.addEventListener('click', () => {
+                const isHidden = catContainer.classList.contains('hidden');
+                if (isHidden) {
+                    catContainer.classList.remove('hidden');
+                    catArrow.classList.add('rotate-180');
+                } else {
+                    catContainer.classList.add('hidden');
+                    catArrow.classList.remove('rotate-180');
+                }
+            });
+        }
+
+        categorySearch.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Prevent default form submission if any
+                scrollToResults();
+                // Close keyboard on mobile
+                categorySearch.blur();
+            }
+        });
+
         // Observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -281,6 +383,37 @@ export async function renderHome(container, targetSlug = null) {
 
         if (filteredData.length > displayedCount) {
             observer.observe(loadingSentinel)
+        }
+
+        // --- Persistence Restoration Logic ---
+        const savedState = sessionStorage.getItem('home_persistence');
+        if (savedState) {
+            try {
+                const state = JSON.parse(savedState);
+                const now = Date.now();
+                // Valid for 10 minutes to avoid stale state on long idle? Or keep it simple.
+                // Let's just restore.
+
+                if (state.search) {
+                    categorySearch.value = state.search;
+                    // Trigger search
+                    categorySearch.dispatchEvent(new Event('input'));
+                }
+
+                if (state.scroll) {
+                    // Small delay to allow rendering
+                    setTimeout(() => {
+                        window.scrollTo(0, state.scroll);
+                        // Clear after restoring One-Time? 
+                        // UX Decision: Do we want to keep it if they go back again?
+                        // Usually yes. But maybe we clear it on "Logo Click" (Home reset).
+                        // For now we leave it, but maybe main.js should clear it if not resolving "Back".
+                        // Actually, simpler: always restore if present, rely on explicit "Reset Search" to clear or explicit navigation from other places.
+                    }, 100);
+                }
+            } catch (e) {
+                console.error('Error restoring state', e);
+            }
         }
 
 

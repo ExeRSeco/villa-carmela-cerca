@@ -1,5 +1,5 @@
 import { dataService } from '../../services/dataService.js';
-import { escapeHTML, generateSlug } from '../../utils.js';
+import { escapeHTML, generateSlug, formatDaysRange } from '../../utils.js';
 import Swal from 'sweetalert2';
 
 export const BusinessForm = (id = null) => {
@@ -43,12 +43,14 @@ export const BusinessForm = (id = null) => {
             // Default category
             if (!business.category && categories.length > 0) business.category = categories[0];
 
-            // Parse Hours (Support v3 and migration from v2)
+            // Parse Hours (Support v4, v3 and migration)
             let hoursData = {
                 is24Hours: false,
-                weekdays: { s1s: '', s1e: '', s2s: '', s2e: '' },
-                saturday: { s1s: '', s1e: '', s2s: '', s2e: '' },
-                sunday: { s1s: '', s1e: '', s2s: '', s2e: '' }
+                blocks: [
+                    { days: [1, 2, 3, 4, 5], s1s: '', s1e: '', s2s: '', s2e: '' }, // Default Block 1 (Mon-Fri)
+                    { days: [6], s1s: '', s1e: '', s2s: '', s2e: '' },             // Default Block 2 (Sat)
+                    { days: [0], s1s: '', s1e: '', s2s: '', s2e: '' }              // Default Block 3 (Sun)
+                ]
             };
 
             if (business.hours) {
@@ -56,28 +58,70 @@ export const BusinessForm = (id = null) => {
                     hoursData.is24Hours = true;
                 }
 
-                if (business.hours.format === 'v3') {
+                if (business.hours.format === 'v4') {
+                    // Load v4
+                    hoursData.blocks = business.hours.schedules.map(sch => {
+                        const s1 = sch.shifts[0] || {};
+                        const s2 = sch.shifts[1] || {};
+                        return {
+                            days: sch.days || [],
+                            s1s: s1.start || '', s1e: s1.end || '',
+                            s2s: s2.start || '', s2e: s2.end || ''
+                        };
+                    });
+                    // Ensure 3 blocks minimum for UI consistency/ease of use, or just use what we have? 
+                    // Let's stick to 3 fixed slot blocks in UI for now as it maps well to previous behavior but flexible.
+                    // If existing data has < 3, pad it.
+                    while (hoursData.blocks.length < 3) {
+                        hoursData.blocks.push({ days: [], s1s: '', s1e: '', s2s: '', s2e: '' });
+                    }
+
+                } else if (business.hours.format === 'v3') {
+                    // Migrate v3 -> v4 structure for UI
                     const mapShifts = (shifts) => ({
                         s1s: shifts[0]?.start || '', s1e: shifts[0]?.end || '',
                         s2s: shifts[1]?.start || '', s2e: shifts[1]?.end || ''
                     });
-                    hoursData.weekdays = mapShifts(business.hours.weekdays?.shifts || []);
-                    hoursData.saturday = mapShifts(business.hours.saturday?.shifts || []);
-                    hoursData.sunday = mapShifts(business.hours.sunday?.shifts || []);
+
+                    hoursData.blocks[0] = { days: [1, 2, 3, 4, 5], ...mapShifts(business.hours.weekdays?.shifts || []) };
+                    hoursData.blocks[1] = { days: [6], ...mapShifts(business.hours.saturday?.shifts || []) };
+                    hoursData.blocks[2] = { days: [0], ...mapShifts(business.hours.sunday?.shifts || []) };
+
                 } else if (business.hours.format === 'v2' || Array.isArray(business.hours.shifts)) {
-                    // Migrate v2 -> v3 (Apply same schedule to all)
+                    // Migrate v2 -> v4
                     const mapShifts = (shifts) => ({
                         s1s: shifts[0]?.start || '', s1e: shifts[0]?.end || '',
                         s2s: shifts[1]?.start || '', s2e: shifts[1]?.end || ''
                     });
                     const common = mapShifts(business.hours.shifts || []);
-                    hoursData.weekdays = { ...common };
-                    hoursData.saturday = { ...common };
-                    hoursData.sunday = { ...common };
+                    hoursData.blocks[0] = { days: [1, 2, 3, 4, 5], ...common };
+                    hoursData.blocks[1] = { days: [6], ...common };
+                    hoursData.blocks[2] = { days: [0], ...common };
                 }
             }
 
-            // Render Form
+            // Helper to render Day Toggles
+            const renderDayToggles = (blockIndex, selectedDays) => {
+                const days = [
+                    { val: 1, label: 'L' }, { val: 2, label: 'M' }, { val: 3, label: 'M' },
+                    { val: 4, label: 'J' }, { val: 5, label: 'V' }, { val: 6, label: 'S' }, { val: 0, label: 'D' }
+                ];
+
+                return `
+                <div class="flex flex-wrap gap-2 mb-3">
+                    ${days.map(d => `
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="b${blockIndex}_d_${d.val}" class="peer sr-only" ${selectedDays.includes(d.val) ? 'checked' : ''}>
+                            <div class="w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold border border-stone-200 text-stone-500 peer-checked:bg-spa-500 peer-checked:text-white peer-checked:border-spa-600 transition-all select-none hover:bg-stone-100">
+                                ${d.label}
+                            </div>
+                        </label>
+                    `).join('')}
+                </div>
+                `;
+            };
+
+            // Render Form (Updated Hours Section)
             container.innerHTML = `
             <div class="max-w-3xl mx-auto animate-fade-in-up mb-10">
                 <div class="flex items-center mb-6">
@@ -139,7 +183,7 @@ export const BusinessForm = (id = null) => {
                     <!-- Details -->
                     <div class="space-y-6">
                         <div class="flex justify-between items-center border-b border-stone-100 pb-2">
-                             <h3 class="text-lg font-bold text-stone-800">Horarios y Atención</h3>
+                             <h3 class="text-lg font-bold text-stone-800">Horarios Personalizados</h3>
                              <label class="flex items-center space-x-2 cursor-pointer">
                                 <input type="checkbox" name="is24Hours" id="is24Hours-check" ${hoursData.is24Hours ? 'checked' : ''} class="w-4 h-4 text-spa-600 rounded focus:ring-spa-500">
                                 <span class="text-stone-700 font-bold text-sm">Abierto 24 Horas</span>
@@ -147,82 +191,37 @@ export const BusinessForm = (id = null) => {
                         </div>
                         
                         <div id="hours-inputs" class="space-y-6 transition-opacity duration-300 ${hoursData.is24Hours ? 'opacity-50 pointer-events-none' : ''}">
-                             
-                             <!-- Lunes a Viernes -->
-                             <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
-                                <h4 class="font-bold text-stone-800 mb-3 border-b border-stone-200 pb-1">Lunes a Viernes</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-bold text-stone-600 mb-1">Turno 1</label>
-                                        <div class="flex gap-2 items-center">
-                                            <input type="time" name="wd_s1s" value="${hoursData.weekdays.s1s}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                            <span class="text-stone-400">-</span>
-                                            <input type="time" name="wd_s1e" value="${hoursData.weekdays.s1e}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-stone-600 mb-1">Turno 2 (Opcional)</label>
-                                        <div class="flex gap-2 items-center">
-                                            <input type="time" name="wd_s2s" value="${hoursData.weekdays.s2s}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                            <span class="text-stone-400">-</span>
-                                            <input type="time" name="wd_s2e" value="${hoursData.weekdays.s2e}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                        </div>
-                                    </div>
-                                </div>
-                             </div>
+                             <p class="text-sm text-stone-500 italic bg-blue-50 p-3 rounded-lg border border-blue-100">
+                                Tips: Selecciona los días para cada bloque horario. Si no seleccionas días, ese bloque se ignorará.
+                             </p>
 
-                             <!-- Sabados -->
-                             <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
-                                <h4 class="font-bold text-stone-800 mb-3 border-b border-stone-200 pb-1">Sábados</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-bold text-stone-600 mb-1">Turno 1</label>
-                                        <div class="flex gap-2 items-center">
-                                            <input type="time" name="sat_s1s" value="${hoursData.saturday.s1s}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                            <span class="text-stone-400">-</span>
-                                            <input type="time" name="sat_s1e" value="${hoursData.saturday.s1e}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                        </div>
+                             ${// Render 3 Generic Blocks
+                [0, 1, 2].map(i => `
+                                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                                    <div class="mb-3">
+                                        <h4 class="text-xs font-bold text-stone-500 uppercase tracking-wide mb-2">Días Activos - Bloque ${i + 1}</h4>
+                                        ${renderDayToggles(i, hoursData.blocks[i].days)}
                                     </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-stone-600 mb-1">Turno 2 (Opcional)</label>
-                                        <div class="flex gap-2 items-center">
-                                            <input type="time" name="sat_s2s" value="${hoursData.saturday.s2s}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                            <span class="text-stone-400">-</span>
-                                            <input type="time" name="sat_s2e" value="${hoursData.saturday.s2e}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-xs font-bold text-stone-600 mb-1">Turno 1</label>
+                                            <div class="flex gap-2 items-center">
+                                                <input type="time" name="b${i}_s1s" value="${hoursData.blocks[i].s1s}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
+                                                <span class="text-stone-400">-</span>
+                                                <input type="time" name="b${i}_s1e" value="${hoursData.blocks[i].s1e}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                             </div>
-
-                             <!-- Domingos -->
-                             <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
-                                <div class="flex justify-between items-center mb-3 border-b border-stone-200 pb-1">
-                                    <h4 class="font-bold text-stone-800">Domingos y Feriados</h4>
-                                    <label class="flex items-center space-x-2 cursor-pointer">
-                                        <input type="checkbox" id="openSundays-check" ${hoursData.sunday.s1s || hoursData.sunday.s2s ? 'checked' : ''} class="w-4 h-4 text-spa-600 rounded focus:ring-spa-500">
-                                        <span class="text-xs font-bold text-stone-600">Abrir Domingos</span>
-                                    </label>
-                                </div>
-                                <div id="sunday-inputs" class="grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ${hoursData.sunday.s1s || hoursData.sunday.s2s ? '' : 'opacity-50 pointer-events-none grayscale'}">
-                                    <div>
-                                        <label class="block text-xs font-bold text-stone-600 mb-1">Turno 1</label>
-                                        <div class="flex gap-2 items-center">
-                                            <input type="time" name="sun_s1s" value="${hoursData.sunday.s1s}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                            <span class="text-stone-400">-</span>
-                                            <input type="time" name="sun_s1e" value="${hoursData.sunday.s1e}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-stone-600 mb-1">Turno 2 (Opcional)</label>
-                                        <div class="flex gap-2 items-center">
-                                            <input type="time" name="sun_s2s" value="${hoursData.sunday.s2s}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
-                                            <span class="text-stone-400">-</span>
-                                            <input type="time" name="sun_s2e" value="${hoursData.sunday.s2e}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
+                                        <div>
+                                            <label class="block text-xs font-bold text-stone-600 mb-1">Turno 2</label>
+                                            <div class="flex gap-2 items-center">
+                                                <input type="time" name="b${i}_s2s" value="${hoursData.blocks[i].s2s}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
+                                                <span class="text-stone-400">-</span>
+                                                <input type="time" name="b${i}_s2e" value="${hoursData.blocks[i].s2e}" class="w-full px-2 py-1.5 rounded border border-stone-300 focus:ring-1 focus:ring-spa-400">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                             </div>
-
+                               `).join('')}
                         </div>
                         
                         <div>
@@ -307,19 +306,6 @@ export const BusinessForm = (id = null) => {
                 }
             });
 
-            // Sunday Toggle
-            const openSundaysCheck = form.querySelector('#openSundays-check');
-            const sundayInputs = form.querySelector('#sunday-inputs');
-
-            openSundaysCheck.addEventListener('change', (e) => {
-                if (!e.target.checked) {
-                    sundayInputs.classList.add('opacity-50', 'pointer-events-none', 'grayscale');
-                    // Optional: Clear values instantly or just on save? 
-                    // Let's clear on save so user can toggle back without losing data immediately
-                } else {
-                    sundayInputs.classList.remove('opacity-50', 'pointer-events-none', 'grayscale');
-                }
-            });
 
             // Auto-calculate expiration logic
             const startDateInput = form.querySelector('[name="startDate"]');
@@ -341,46 +327,56 @@ export const BusinessForm = (id = null) => {
                 btn.disabled = true;
                 btn.textContent = 'Guardando...';
 
-                // Construct V3 Hours Object
-                const getShifts = (p1, p2, p3, p4) => {
-                    const shifts = [];
-                    const s1s = formData.get(p1);
-                    const s1e = formData.get(p2);
-                    const s2s = formData.get(p3);
-                    const s2e = formData.get(p4);
+                // Construct V4 data
+                let hoursV4;
 
-                    if (s1s && s1e) shifts.push({ start: s1s, end: s1e });
-                    if (s2s && s2e) shifts.push({ start: s2s, end: s2e });
-                    return shifts;
-                };
-
-                const wdShifts = getShifts('wd_s1s', 'wd_s1e', 'wd_s2s', 'wd_s2e');
-                const satShifts = getShifts('sat_s1s', 'sat_s1e', 'sat_s2s', 'sat_s2e');
-                // Only save Sunday shifts if checkbox is checked
-                const sunShifts = openSundaysCheck.checked ? getShifts('sun_s1s', 'sun_s1e', 'sun_s2s', 'sun_s2e') : [];
-
-                // Generate compact display string (e.g. "L-V: 9-13 | Sab: 9-13")
-                // Only simple generation here, component does smart rendering
-                const formatShifts = (shifts) => shifts.map(s => `${s.start}-${s.end}`).join('/');
-                const parts = [];
-                if (wdShifts.length) parts.push(`L-V: ${formatShifts(wdShifts)}`);
-                if (satShifts.length) parts.push(`Sab: ${formatShifts(satShifts)}`);
-                if (sunShifts.length) parts.push(`Dom: ${formatShifts(sunShifts)}`);
-
-                let hoursV3;
                 if (is24HoursCheck.checked) {
-                    hoursV3 = {
-                        format: 'v3',
+                    hoursV4 = {
+                        format: 'v4',
                         is24Hours: true,
+                        schedules: [], // No schedules needed, implies 24/7
                         display: 'Abierto las 24hs'
                     };
                 } else {
-                    hoursV3 = {
-                        format: 'v3',
+                    const schedules = [];
+                    // Iterate over 3 blocks
+                    for (let i = 0; i < 3; i++) {
+                        const days = [];
+                        // Check days 0-6
+                        [0, 1, 2, 3, 4, 5, 6].forEach(d => {
+                            if (formData.get(`b${i}_d_${d}`) === 'on') {
+                                days.push(d);
+                            }
+                        });
+
+                        // Get shifts
+                        const shifts = [];
+                        const s1s = formData.get(`b${i}_s1s`);
+                        const s1e = formData.get(`b${i}_s1e`);
+                        const s2s = formData.get(`b${i}_s2s`);
+                        const s2e = formData.get(`b${i}_s2e`);
+
+                        if (s1s && s1e) shifts.push({ start: s1s, end: s1e });
+                        if (s2s && s2e) shifts.push({ start: s2s, end: s2e });
+
+                        if (days.length > 0 && shifts.length > 0) {
+                            schedules.push({ days, shifts });
+                        }
+                    }
+
+                    // Display string generator implicit (will be handled by backend or front logic, but good to have a string)
+                    // Let's create a simple one for DB readability or lists
+                    // "Lun-Jue: 9-13 | Vie: 9-13 17-20"
+                    const parts = schedules.map(sch => {
+                        const dStr = formatDaysRange(sch.days);
+                        const tStr = sch.shifts.map(s => `${s.start}-${s.end}`).join('/');
+                        return `${dStr}: ${tStr}`;
+                    });
+
+                    hoursV4 = {
+                        format: 'v4',
                         is24Hours: false,
-                        weekdays: { shifts: wdShifts },
-                        saturday: { shifts: satShifts },
-                        sunday: { shifts: sunShifts },
+                        schedules: schedules,
                         display: parts.length > 0 ? parts.join(' | ') : 'Consultar'
                     };
                 }
@@ -414,8 +410,7 @@ export const BusinessForm = (id = null) => {
                         description: formData.get('description') || null,
                         promotions: formData.get('promotions') || null,
                         clarification: formData.get('clarification') || null,
-                        hours: hoursV3,
-                        hours: hoursV3,
+                        hours: hoursV4,
                         paymentMethods,
                         // Generate slug if new or name changed (simplified: always regenerate on save from name)
                         // Ideally we check if name changed, but unique constraint might fail if we don't handle collisions.

@@ -1,4 +1,4 @@
-import { escapeHTML } from '../utils.js';
+import { escapeHTML, formatDaysRange } from '../utils.js';
 
 
 
@@ -33,9 +33,12 @@ export function getSmartStatus(hoursData, isOpenOverride) {
     const day = now.getDay(); // 0 = Sun, 6 = Sat
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-    // Determine shifts based on day (v3) or fallback (v2)
+    // Determine shifts based on day (v3) or fallback (v2) or v4
     let shifts = [];
-    if (hoursData.format === 'v3') {
+    if (hoursData.format === 'v4') {
+        const todaySchedule = hoursData.schedules.find(s => s.days.includes(day));
+        shifts = todaySchedule ? todaySchedule.shifts : [];
+    } else if (hoursData.format === 'v3') {
         if (day === 0) shifts = hoursData.sunday?.shifts || [];
         else if (day === 6) shifts = hoursData.saturday?.shifts || [];
         else shifts = hoursData.weekdays?.shifts || [];
@@ -97,8 +100,17 @@ export const Card = (data) => {
     let hoursDisplay = '';
     let smartStatus = { text: 'Cerrado', class: 'text-stone-500', isOpen: false };
 
-    if (data.hours && typeof data.hours === 'object' && (data.hours.format === 'v2' || data.hours.format === 'v3')) {
-        hoursDisplay = escapeHTML(data.hours.display);
+    if (data.hours && typeof data.hours === 'object') {
+        if (data.hours.format === 'v4') {
+            const parts = data.hours.schedules.map(sch => {
+                const dStr = formatDaysRange(sch.days);
+                const tStr = sch.shifts.map(s => `${s.start}-${s.end}`).join('/');
+                return `${dStr}: ${tStr}`;
+            });
+            hoursDisplay = parts.join(' | ');
+        } else if (data.hours.format === 'v2' || data.hours.format === 'v3') {
+            hoursDisplay = escapeHTML(data.hours.display);
+        }
         smartStatus = getSmartStatus(data.hours, data.isOpen);
     } else {
         // Legacy

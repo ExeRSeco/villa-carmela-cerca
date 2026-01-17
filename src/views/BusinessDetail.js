@@ -1,6 +1,6 @@
 
 import { LocationIcon, PhoneIcon, getSmartStatus } from '../components/Card.js';
-import { escapeHTML } from '../utils.js';
+import { escapeHTML, formatDaysRange } from '../utils.js';
 
 export const BusinessDetail = (data) => {
     const safeName = escapeHTML(data.name);
@@ -13,7 +13,34 @@ export const BusinessDetail = (data) => {
     const smartStatus = getSmartStatus(data.hours, data.isOpen);
 
     let hoursHtml = '';
-    if (data.hours?.format === 'v3') {
+    if (data.hours?.is24Hours) {
+        hoursHtml = `
+        <div class="text-green-600 font-bold flex items-center gap-2 mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Abierto las 24 horas
+        </div>`;
+    } else if (data.hours?.format === 'v4') {
+
+        const renderSchedule = (sch) => {
+            if (!sch.days || sch.days.length === 0) return '';
+            const dStr = formatDaysRange(sch.days);
+            const tStr = sch.shifts.map(s => `${s.start} - ${s.end}`).join(' / ');
+            return `
+             <div class="flex flex-col items-center border-b border-stone-100 last:border-0 py-2">
+                <div class="font-bold text-stone-800 mb-1 capitalize">${dStr}</div>
+                <div class="text-sm text-stone-600 font-medium whitespace-nowrap">${tStr}</div>
+             </div>
+             `;
+        };
+
+        hoursHtml = `
+        <div class="mt-2 text-stone-600 text-center">
+            ${data.hours.schedules.map(renderSchedule).join('')}
+        </div>`;
+
+    } else if (data.hours?.format === 'v3') {
         const renderShift = (shifts) => shifts && shifts.length ? shifts.map(s => `${s.start} - ${s.end}`).join(' / ') : 'Cerrado';
         hoursHtml = `
         <div class="grid grid-cols-[min-content_1fr] gap-x-6 gap-y-2 text-stone-600 mt-2">
