@@ -163,3 +163,17 @@ export const formatDaysRange = (days) => {
 
     return ranges.join(', ');
 };
+
+export const openWhatsApp = (phone) => {
+    if (!phone) return;
+    let cleanPhone = phone.replace(/\D/g, '');
+
+    // Logic to ensure 549 prefix for Argentina
+    if (!cleanPhone.startsWith('54')) {
+        cleanPhone = '549' + cleanPhone;
+    } else if (cleanPhone.startsWith('54') && !cleanPhone.startsWith('549')) {
+        cleanPhone = cleanPhone.replace('54', '549');
+    }
+
+    window.open(`https://wa.me/${cleanPhone}`, '_blank');
+};

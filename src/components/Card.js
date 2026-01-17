@@ -122,7 +122,7 @@ export const Card = (data) => {
 
 
     return `
-    <article class="bg-white rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer h-full flex flex-col group relative ${isFeatured ? 'border-2 border-yellow-400 shadow-xl scale-[1.02]' : 'border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-1'}" data-business-id="${data.id}">
+    <article class="bg-white rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer h-full flex flex-col group relative ${isFeatured ? 'border-2 border-yellow-400 shadow-xl scale-[1.02]' : 'border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-1'}" data-business-id="${data.id}" data-business-slug="${data.slug}">
         ${isFeatured ? `
         <div class="absolute top-0 left-1/2 transform -translate-x-1/2 z-20 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-4 py-1 rounded-b-lg shadow-sm tracking-widest uppercase">
             Destacado

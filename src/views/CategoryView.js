@@ -74,7 +74,7 @@ export const CategoryView = async (categorySlug) => {
              </div>
 
              <!-- Grid -->
-             <section aria-label="Listado de comercios" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+             <section id="category-grid" aria-label="Listado de comercios" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                 ${cardsHtml}
              </section>
              

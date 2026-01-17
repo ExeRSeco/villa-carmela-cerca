@@ -12,7 +12,7 @@ import { BusinessDetail } from './views/BusinessDetail.js'
 import { CategoryView } from './views/CategoryView.js'
 import { dataService } from './services/dataService.js'
 import { authService } from './services/authService.js'
-import { updateSchema } from './utils.js'
+import { updateSchema, openWhatsApp } from './utils.js'
 import { injectSpeedInsights } from '@vercel/speed-insights';
 
 injectSpeedInsights();
@@ -216,7 +216,7 @@ async function router() {
         navHome.classList.remove('text-spa-600', 'font-bold');
         document.title = `${slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} - Villa Carmela Cerca`;
 
-        // SEO: Meta Description
+
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) {
             const formattedName = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -224,6 +224,30 @@ async function router() {
         }
 
         window.scrollTo(0, 0);
+
+        // Attach Event Listeners for Grid
+        const catGrid = document.getElementById('category-grid');
+        if (catGrid) {
+            catGrid.addEventListener('click', (e) => {
+                const whatsappBtn = e.target.closest('[data-action="whatsapp"]');
+                const card = e.target.closest('article');
+
+                if (whatsappBtn) {
+                    e.stopPropagation(); // Stop card click
+                    const phone = whatsappBtn.dataset.phone;
+                    openWhatsApp(phone); // Using imported helper
+                    return;
+                }
+
+                if (card) {
+                    const slug = card.dataset.businessSlug;
+                    if (slug) {
+                        navigateTo(`/business/${slug}`);
+                    }
+                }
+            });
+        }
+
 
     } else {
         // Default Home
